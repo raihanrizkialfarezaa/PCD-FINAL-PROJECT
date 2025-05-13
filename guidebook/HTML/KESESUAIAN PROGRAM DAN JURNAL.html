@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BISMILLAH</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h3 id="analisis-kesesuaian-program-dengan-jurnal-bilateral-filtering-for-gray-and-color-images-iccv-1998"><strong>Analisis Kesesuaian Program dengan Jurnal “Bilateral Filtering for Gray and Color Images” (ICCV 1998)</strong></h3>
+<p>Program yang diberikan <strong>mengimplementasikan konsep dasar Bilateral Filter</strong> yang dijelaskan dalam jurnal, tetapi <strong>beberapa aspek penting perlu diperbaiki atau dioptimalkan</strong> agar lebih selaras dengan pendekatan teoritis dan praktis yang dijelaskan dalam jurnal. Berikut analisis detailnya:</p>
+<hr>
+<h3 id="keselarasan-konsep-inti"><strong>1. Keselarasan Konsep Inti</strong></h3>
+<h4 id="a.-gabungan-domain-dan-range-kernel"><strong>A. Gabungan Domain dan Range Kernel</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Bilateral Filter menggabungkan <strong>domain kernel</strong> (berdasarkan jarak spasial) dan <strong>range kernel</strong> (berdasarkan kesamaan intensitas/warna) untuk preservasi tepi.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Domain Kernel</strong>: Diimplementasikan dengan <code>kernel_size = int(2 * np.ceil(3 * sigma_d)) + 1</code> dan kernel Gaussian.</p>
+</li>
+<li>
+<p>✅ <strong>Range Kernel</strong>: Menggunakan LUT (<code>precompute_similarity_lut</code>) dengan formula eksponensial sesuai jurnal.</p>
+</li>
+<li>
+<p>✅ <strong>Gabungan Bobot</strong>: Fungsi <code>bilateral_filter</code> menggabungkan domain dan range kernel dengan perkalian elemen-wise.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Kesimpulan</strong>:<br>
+Program <strong>sesuai</strong> dengan konsep dasar jurnal.</p>
+<hr>
+<h4 id="b.-penggunaan-cie-lab-untuk-citra-warna"><strong>B. Penggunaan CIE-Lab untuk Citra Warna</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menganjurkan penggunaan ruang warna <strong>CIE-Lab</strong> untuk preservasi persepsi warna, karena jarak Euclidean dalam CIE-Lab sesuai dengan diskriminasi warna manusia.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Konversi ke CIE-Lab</strong>: Fungsi <code>enhance_color_image</code> mengonversi citra RGB ke CIE-Lab dan memfilter channel Luminance (L).</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Hanya channel L yang difilter, sementara channel a dan b tidak diubah. Ini <strong>tidak sepenuhnya memanfaatkan CIE-Lab</strong>, karena jarak warna seharusnya dihitung dalam ruang 3D (L, a, b), bukan hanya 1D (L).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Untuk citra warna, gunakan jarak Euclidean dalam CIE-Lab (misalnya, <code>sqrt((ΔL)^2 + (Δa)^2 + (Δb)^2)</code>) untuk bobot range kernel, bukan hanya intensitas L.</p>
+<hr>
+<h3 id="optimasi-dan-efisiensi"><strong>2. Optimasi dan Efisiensi</strong></h3>
+<h4 id="a.-precompute-lookup-table-lut"><strong>A. Precompute Lookup Table (LUT)</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Tidak menyebutkan LUT, tetapi efisiensi komputasi adalah fokus utama.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Implementasi LUT</strong>: Fungsi <code>precompute_similarity_lut</code> mengoptimalkan perhitungan range kernel dengan LUT.</p>
+</li>
+<li>
+<p>✅ <strong>Efisiensi</strong>: Menghindari perhitungan ulang eksponensial untuk setiap pixel.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Kesimpulan</strong>:<br>
+Program <strong>lebih efisien</strong> daripada implementasi naif, tetapi <strong>sesuai</strong> dengan prinsip jurnal.</p>
+<hr>
+<h4 id="b.-dinamisasi-sigma_r-dengan">B. Dinamisasi <code>sigma_r</code> dengan</h4>
+<p><code>auto_sigma_r</code></p>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menekankan adaptasi parameter filter berdasarkan karakteristik citra (misalnya, kontras).</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Adaptasi Dinamis</strong>: Fungsi <code>auto_sigma_r</code> menghitung <code>sigma_r</code> berdasarkan standar deviasi histogram, sesuai prinsip jurnal.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Nilai minimum <code>sigma_r = 10</code> mungkin terlalu tinggi untuk citra dengan kontras sangat rendah (misalnya, citra dengan variasi intensitas kecil).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Gunakan skala dinamis yang lebih fleksibel, misalnya:</p>
+<pre class=" language-python"><code class="prism  language-python">sigma_r <span class="token operator">=</span> <span class="token builtin">max</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>std <span class="token operator">*</span> <span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>  <span class="token comment"># Skala berdasarkan std</span>
+</code></pre>
+<hr>
+<h3 id="penanganan-citra-grayscale-vs-warna"><strong>3. Penanganan Citra Grayscale vs Warna</strong></h3>
+<h4 id="a.-citra-grayscale"><strong>A. Citra Grayscale</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Tidak spesifik, tetapi prinsip yang sama berlaku.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Penanganan Grayscale</strong>: Fungsi <code>bilateral_filter</code> menambahkan dimensi channel jika citra grayscale.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Hasil akhir grayscale disimpan sebagai mode <code>'L'</code> tetapi tidak diverifikasi dengan benar (fungsi <code>analyze_histogram</code> error untuk citra grayscale).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Perbaiki fungsi <code>analyze_histogram</code> untuk menangani citra grayscale dengan memeriksa dimensi array.</p>
+<hr>
+<h4 id="b.-citra-warna-rgb"><strong>B. Citra Warna (RGB)</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menekankan bahwa filter harus diterapkan pada <strong>ruang warna perceptual</strong> (seperti CIE-Lab) untuk menghindari warna palsu (phantom colors).</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Konversi ke CIE-Lab</strong>: Dilakukan dengan <code>cv2.cvtColor(img_rgb, cv2.COLOR_RGB2Lab)</code>.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Channel <code>a</code> dan <code>b</code> tidak diubah, sehingga jarak warna tidak sepenuhnya sesuai CIE-Lab.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Terapkan filter pada semua channel CIE-Lab (L, a, b) dengan bobot gabungan berdasarkan jarak Euclidean dalam ruang 3D.</p>
+<hr>
+<h3 id="iterative-filtering-untuk-efek-cartoon-like"><strong>4. Iterative Filtering untuk Efek "Cartoon-Like"</strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menyebutkan bahwa iterasi filter dapat menghasilkan “flattening” warna tanpa mengaburkan tepi (lihat Gambar 7© dalam jurnal).</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Implementasi Iteratif</strong>: Fungsi <code>iterative_bilateral_filter</code> menerapkan filter berulang.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Iterasi terlalu banyak dapat menyebabkan over-smoothing (seperti pada Gambar 7© dalam jurnal, efek “cartoon” muncul setelah 5 iterasi).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Batas jumlah iterasi secara dinamis berdasarkan perubahan intensitas antar-iterasi.</p>
+<hr>
+<h3 id="validasi-dengan-histogram"><strong>5. Validasi dengan Histogram</strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menekankan pentingnya validasi efek filter dengan analisis distribusi intensitas.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Analisis Histogram</strong>: Fungsi <code>analyze_histogram</code> memplot histogram intensitas sebelum/sesudah filtering.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Fungsi <code>analyze_histogram</code> error untuk citra grayscale karena mencoba mengakses channel R/G/B yang tidak ada.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Modifikasi <code>analyze_histogram</code> untuk menangani citra grayscale dan warna secara terpisah:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>img<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token operator">or</span> img<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+    plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img<span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> ch<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> ch<span class="token punctuation">]</span><span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">,</span> color<span class="token operator">=</span>col<span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h3 id="ukuran-kernel-dan-padding"><strong>6. Ukuran Kernel dan Padding</strong></h3>
+<h4 id="a.-ukuran-kernel"><strong>A. Ukuran Kernel</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menggunakan kernel berbasis <code>3*sigma_d</code> untuk mencakup 99.7% distribusi Gaussian.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Formula Kernel</strong>: <code>kernel_size = int(2 * np.ceil(3 * sigma_d)) + 1</code> sesuai rekomendasi jurnal.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Untuk citra kecil (misalnya, matriks 3x3), kernel 13x13 melebihi dimensi citra.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Batasi ukuran kernel maksimum sesuai dimensi citra:</p>
+<pre class=" language-python"><code class="prism  language-python">kernel_size <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span>kernel_size<span class="token punctuation">,</span> h<span class="token punctuation">,</span> w<span class="token punctuation">)</span>
+</code></pre>
+<h4 id="b.-padding-pada-border"><strong>B. Padding pada Border</strong></h4>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Tidak membahas padding, tetapi efek tepi (border) disebut sebagai tantangan.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>❌ <strong>Tidak Ada Padding</strong>: Fungsi <code>bilateral_filter</code> tidak menggunakan padding, menyebabkan window di tepi citra dipotong.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Gunakan padding refleksi atau replikasi:</p>
+<pre class=" language-python"><code class="prism  language-python">pad_size <span class="token operator">=</span> kernel_size <span class="token operator">//</span> <span class="token number">2</span>
+img_padded <span class="token operator">=</span> np<span class="token punctuation">.</span>pad<span class="token punctuation">(</span>img_array<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>pad_size<span class="token punctuation">,</span> pad_size<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>pad_size<span class="token punctuation">,</span> pad_size<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'reflect'</span><span class="token punctuation">)</span>
+</code></pre>
+<hr>
+<h3 id="preservasi-tepi-pada-citra-warna"><strong>7. Preservasi Tepi pada Citra Warna</strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menekankan bahwa Bilateral Filter <strong>tidak menghasilkan warna palsu</strong> (phantom colors) di tepi, berbeda dengan filtering terpisah pada channel RGB.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Konversi ke CIE-Lab</strong>: Menghindari warna palsu dengan filtering hanya pada channel L.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Tidak menggunakan jarak warna 3D dalam CIE-Lab, sehingga preservasi warna kurang optimal.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Gabungkan filtering pada semua channel CIE-Lab dengan bobot berdasarkan jarak Euclidean dalam ruang 3D.</p>
+<hr>
+<h3 id="parameter-sigma_d-dan-sigma_r"><strong>8. Parameter <code>sigma_d</code> dan <code>sigma_r</code></strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menyebutkan bahwa <code>sigma_d</code> mengontrol smoothing spasial, sementara <code>sigma_r</code> mengontrol preservasi warna/intensitas.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Parameter Dinamis</strong>: Fungsi <code>auto_sigma_r</code> menyesuaikan <code>sigma_r</code> berdasarkan histogram.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Default <code>sigma_r=50</code> terlalu tinggi untuk citra dengan kontras rendah.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Gunakan skala <code>sigma_r</code> relatif terhadap rentang intensitas (misalnya, <code>sigma_r = max(int(std), 5)</code>).</p>
+<hr>
+<h3 id="kompleksitas-komputasi"><strong>9. Kompleksitas Komputasi</strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menyebutkan bahwa Bilateral Filter non-iteratif dan efisien.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Implementasi manual dengan loop Python bersarang (<code>for y in range(h): for x in range(w): ...</code>) sangat lambat untuk citra besar.</p>
+</li>
+<li>
+<p>✅ <strong>Solusi Parsial</strong>: Penggunaan LUT mengurangi perhitungan ulang eksponensial.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Gunakan implementasi berbasis vektorisasi NumPy atau library optimasi (misalnya, OpenCV <code>cv2.bilateralFilter</code> atau GPU-accelerated libraries).</p>
+<hr>
+<h3 id="studi-kasus-dan-validasi"><strong>10. Studi Kasus dan Validasi</strong></h3>
+<ul>
+<li>
+<p><strong>Jurnal</strong>:<br>
+Menyertakan contoh studi kasus (Gambar 1–7) untuk validasi efek filter.</p>
+</li>
+<li>
+<p><strong>Program</strong>:</p>
+<ul>
+<li>
+<p>✅ <strong>Validasi Histogram</strong>: Fungsi <code>analyze_histogram</code> memvalidasi perubahan distribusi intensitas.</p>
+</li>
+<li>
+<p>⚠️ <strong>Masalah</strong>: Studi kasus manual (matriks 3x3) tidak sepenuhnya mencerminkan kompleksitas citra nyata.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rekomendasi</strong>:<br>
+Tambahkan contoh validasi kuantitatif (misalnya, PSNR, SSIM) untuk membandingkan kualitas citra sebelum/sesudah filtering.</p>
+<hr>
+<h3 id="kesimpulan-akhir"><strong>Kesimpulan Akhir</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Aspek</th>
+<th>Kesesuaian dengan Jurnal</th>
+<th>Catatan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Konsep Dasar</strong></td>
+<td>✅ Sesuai</td>
+<td>Menggabungkan domain dan range kernel.</td>
+</tr>
+<tr>
+<td><strong>CIE-Lab</strong></td>
+<td>⚠️ Sebagian Sesuai</td>
+<td>Hanya channel L yang difilter, bukan jarak warna 3D.</td>
+</tr>
+<tr>
+<td><strong>Efisiensi</strong></td>
+<td>✅ Baik</td>
+<td>Gunakan LUT dan padding untuk optimasi.</td>
+</tr>
+<tr>
+<td><strong>Preservasi Tepi</strong></td>
+<td>✅ Baik</td>
+<td>Tepi tetap tajam, tidak ada warna palsu (jika CIE-Lab digunakan dengan benar).</td>
+</tr>
+<tr>
+<td><strong>Iterasi untuk Efek "Cartoon"</strong></td>
+<td>✅ Sesuai</td>
+<td>Namun, batasi jumlah iterasi untuk menghindari over-smoothing.</td>
+</tr>
+<tr>
+<td><strong>Penggunaan Histogram</strong></td>
+<td>✅ Sesuai</td>
+<td>Perlu perbaikan untuk penanganan citra grayscale.</td>
+</tr>
+</tbody>
+</table><p><strong>Rekomendasi Utama</strong>:</p>
+<ol>
+<li>
+<p>Gunakan jarak warna 3D dalam CIE-Lab untuk citra warna.</p>
+</li>
+<li>
+<p>Tambahkan padding untuk menghindari efek border.</p>
+</li>
+<li>
+<p>Perbaiki fungsi <code>analyze_histogram</code> untuk citra grayscale.</p>
+</li>
+<li>
+<p>Optimalkan performa dengan vektorisasi atau library GPU.</p>
+</li>
+</ol>
+<p>Program ini <strong>sudah mencakup konsep inti</strong> dari jurnal, tetapi perlu <strong>penyesuaian pada implementasi detail</strong> untuk memaksimalkan akurasi dan efisiensi.</p>
+</div>
+</body>
+
+</html>
