@@ -1,0 +1,1976 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTAGHFIRULLAH</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h2 id="library">1. LIBRARY</h2>
+<h3 id="import-os"><strong>1. <code>import os</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+Mengakses dan memanipulasi sistem operasi, terutama untuk:</p>
+<ul>
+<li>Membaca/membuat direktori.</li>
+<li>Memeriksa keberadaan file.</li>
+<li>Mengelola path file (jalur direktori).</li>
+</ul>
+<p><strong>Contoh Penggunaan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token operator">not</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># Mengecek apakah direktori output ada</span>
+    os<span class="token punctuation">.</span>makedirs<span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span>         <span class="token comment"># Jika tidak, buat direktori baru</span>
+</code></pre>
+<p><strong>Kapan Digunakan</strong>:</p>
+<ul>
+<li>
+<p>Saat memproses semua file dalam direktori (<code>os.listdir()</code>).</p>
+</li>
+<li>
+<p>Saat menyimpan hasil gambar ke direktori tertentu.</p>
+</li>
+</ul>
+<hr>
+<h3 id="import-cv2"><strong>2. <code>import cv2</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+OpenCV (Open Source Computer Vision Library) untuk pemrosesan citra dan video.</p>
+<p>Digunakan untuk:</p>
+<ul>
+<li>
+<p>Membaca/menulis gambar (<code>cv2.imread</code>, <code>cv2.imwrite</code>).</p>
+</li>
+<li>
+<p>Mengonversi ruang warna (RGB → CIE-Lab atau sebaliknya).</p>
+</li>
+<li>
+<p>Menghitung histogram (<code>cv2.calcHist</code>).</p>
+</li>
+<li>
+<p>Operasi matematis pada citra (seperti <code>cv2.split</code>, <code>cv2.merge</code>).</p>
+</li>
+</ul>
+<p><strong>Contoh Penggunaan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>image_path<span class="token punctuation">)</span>                <span class="token comment"># Membaca gambar</span>
+img_rgb <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2RGB<span class="token punctuation">)</span>  <span class="token comment"># Konversi BGR ke RGB</span>
+lab <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img_rgb<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_RGB2Lab<span class="token punctuation">)</span>  <span class="token comment"># Konversi RGB ke CIE-Lab</span>
+</code></pre>
+<p><strong>Catatan Penting</strong>:</p>
+<ul>
+<li>
+<p>OpenCV menggunakan format <strong>BGR</strong>, sedangkan PIL (library lain) menggunakan <strong>RGB</strong>.</p>
+</li>
+<li>
+<p>Fungsi seperti <code>cv2.calcHist</code> digunakan untuk analisis histogram.</p>
+</li>
+</ul>
+<hr>
+<h3 id="import-numpy-as-np"><strong>3. <code>import numpy as np</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+Memproses array multidimensi (seperti gambar) secara cepat dan efisien.</p>
+<p>Digunakan untuk:</p>
+<ul>
+<li>
+<p>Mengubah gambar menjadi array NumPy.</p>
+</li>
+<li>
+<p>Menghitung kernel domain dan range.</p>
+</li>
+<li>
+<p>Melakukan operasi matematis (eksponensial, penjumlahan, dll.).</p>
+</li>
+<li>
+<p>Memanipulasi matriks intensitas (misalnya, menghitung selisih intensitas).</p>
+</li>
+</ul>
+<p><strong>Contoh Pengunakan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">img_array <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>float32<span class="token punctuation">)</span>  <span class="token comment"># Konversi PIL.Image ke NumPy array</span>
+domain_kernel <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span>xx<span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span> yy<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> sigma_d<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Kernel domain</span>
+result<span class="token punctuation">[</span>y<span class="token punctuation">,</span> x<span class="token punctuation">,</span> ch<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>local_window <span class="token operator">*</span> normalized_weights<span class="token punctuation">)</span>  <span class="token comment"># Konvolusi berbobot</span>
+</code></pre>
+<p><strong>Kapan Digunakan</strong>:</p>
+<ul>
+<li>
+<p>Saat memanipulasi pixel gambar (matriks intensitas).</p>
+</li>
+<li>
+<p>Saat menghitung kernel bilateral filter (domain + range).</p>
+</li>
+<li>
+<p>Saat melakukan operasi vektorisasi untuk efisiensi.</p>
+</li>
+</ul>
+<hr>
+<h3 id="from-pil-import-image"><strong>4. <code>from PIL import Image</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+Memproses dan menyimpan gambar dalam berbagai format.<br>
+Digunakan untuk:</p>
+<ul>
+<li>
+<p>Membuka gambar (<code>Image.open</code>).</p>
+</li>
+<li>
+<p>Menyimpan hasil gambar (<code>Image.save</code>).</p>
+</li>
+<li>
+<p>Mengonversi antara mode gambar (misalnya, grayscale ke RGB).</p>
+</li>
+<li>
+<p>Menghapus dimensi channel jika diperlukan (<code>np.squeeze</code>).</p>
+</li>
+</ul>
+<p><strong>Contoh Penggunaan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">Image<span class="token punctuation">.</span>fromarray<span class="token punctuation">(</span>result<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Konversi NumPy array ke PIL.Image</span>
+Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>input_path<span class="token punctuation">)</span>                    <span class="token comment"># Membaca gambar untuk analisis histogram</span>
+</code></pre>
+<p><strong>Kapan Digunakan</strong>:</p>
+<ul>
+<li>
+<p>Saat menyimpan hasil gambar setelah filtering.</p>
+</li>
+<li>
+<p>Saat membaca gambar dari direktori (sebelum konversi ke array NumPy/OpenCV).</p>
+</li>
+</ul>
+<hr>
+<h3 id="import-matplotlib.pyplot-as-plt"><strong>5. <code>import matplotlib.pyplot as plt</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+Visualisasi data (grafik, plot, histogram).</p>
+<p>Digunakan untuk:</p>
+<ul>
+<li>
+<p>Plot histogram intensitas sebelum dan sesudah filtering.</p>
+</li>
+<li>
+<p>Menampilkan perbedaan distribusi warna.</p>
+</li>
+</ul>
+<p><strong>Contoh Penggunaan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img_output<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> ch<span class="token punctuation">]</span><span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">,</span> color<span class="token operator">=</span>col<span class="token punctuation">)</span>  <span class="token comment"># Plot histogram</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">"histogram_comparison.png"</span><span class="token punctuation">)</span>  <span class="token comment"># Menyimpan hasil plot</span>
+</code></pre>
+<p><strong>Kapan Digunakan</strong>:</p>
+<ul>
+<li>
+<p>Dalam fungsi <code>analyze_histogram</code> untuk memvalidasi efek filter.</p>
+</li>
+<li>
+<p>Saat ingin memvisualisasikan perubahan distribusi intensitas.</p>
+</li>
+</ul>
+<hr>
+<h3 id="from-tqdm-import-tqdm"><strong>6. <code>from tqdm import tqdm</code></strong></h3>
+<p><strong>Fungsi Utama</strong>:<br>
+Menampilkan progress bar pada proses iterasi yang panjang.<br>
+Digunakan untuk:</p>
+<ul>
+<li>Memberi feedback visual saat memproses banyak gambar.</li>
+</ul>
+<p><strong>Contoh Penggunaan dalam Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> filename <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>input_dir<span class="token punctuation">)</span><span class="token punctuation">,</span> desc<span class="token operator">=</span><span class="token string">"Processing Images"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># Progress bar</span>
+</code></pre>
+<p><strong>Kapan Digunakan</strong>:</p>
+<ul>
+<li>
+<p>Saat memproses semua file dalam direktori (<code>process_directory</code>).</p>
+</li>
+<li>
+<p>Saat ingin mengetahui kemajuan proses tanpa mengeksekusi kode tambahan.</p>
+</li>
+</ul>
+<hr>
+<h3 id="ringkasan-fungsi-masing-masing-library"><strong>Ringkasan Fungsi Masing-Masing Library</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Fungsi Utama dalam Kode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>os</code></td>
+<td>Mengelola direktori input/output dan ekstensi file.</td>
+</tr>
+<tr>
+<td><code>cv2</code></td>
+<td>Membaca gambar, mengonversi ruang warna (RGB ↔ CIE-Lab), menghitung histogram.</td>
+</tr>
+<tr>
+<td><code>numpy</code></td>
+<td>Memanipulasi array gambar, menghitung kernel, dan operasi matematis kompleks.</td>
+</tr>
+<tr>
+<td><code>PIL.Image</code></td>
+<td>Membuka dan menyimpan gambar dalam format JPEG/PNG.</td>
+</tr>
+<tr>
+<td><code>matplotlib</code></td>
+<td>Memvisualisasikan histogram sebelum/sesudah filtering.</td>
+</tr>
+<tr>
+<td><code>tqdm</code></td>
+<td>Menampilkan progress bar saat memproses banyak gambar.</td>
+</tr>
+</tbody>
+</table><hr>
+<h3 id="interaksi-antar-library"><strong>Interaksi Antar-Library</strong></h3>
+<ol>
+<li>
+<p><strong>OpenCV ↔ PIL</strong>:</p>
+<ul>
+<li>
+<p>Gambar dibaca dengan <code>cv2.imread</code> (format BGR), dikonversi ke RGB dengan <code>cv2.cvtColor</code>.</p>
+</li>
+<li>
+<p>Hasil filter disimpan sebagai <code>PIL.Image</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>NumPy ↔ Semua Library</strong>:</p>
+<ul>
+<li>
+<p>Semua operasi matematis dilakukan pada array NumPy.</p>
+</li>
+<li>
+<p>Hasil akhir dikonversi kembali ke <code>PIL.Image</code> atau disimpan dengan <code>cv2.imwrite</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Matplotlib ↔ NumPy</strong>:</p>
+<ul>
+<li>
+<p>Histogram dihitung dengan <code>cv2.calcHist</code> atau <code>np.histogram</code>.</p>
+</li>
+<li>
+<p>Data histogram diplot dengan <code>matplotlib</code>.</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="contoh-alur-data-dalam-kode"><strong>Contoh Alur Data dalam Kode</strong></h3>
+<ol>
+<li>
+<p><strong>Input</strong>:</p>
+<ul>
+<li>Gambar dibaca dengan <code>cv2.imread</code> → dikonversi ke RGB.</li>
+</ul>
+</li>
+<li>
+<p><strong>Proses</strong>:</p>
+<ul>
+<li>
+<p>Jika gambar warna, konversi ke CIE-Lab → filter channel Luminance (L) dengan <code>bilateral_filter</code>.</p>
+</li>
+<li>
+<p>Jika grayscale, filter langsung.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Output</strong>:</p>
+<ul>
+<li>Hasil dikonversi kembali ke RGB (jika warna) → disimpan dengan <code>PIL.Image.save</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Analisis</strong>:</p>
+<ul>
+<li>Histogram diplot dengan <code>matplotlib.pyplot.hist</code>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="precompute_similarity_lut">2. precompute_similarity_lut()</h1>
+<h3 id="fungsi">Fungsi:</h3>
+<p><code>precompute_similarity_lut(max_intensity=256, sigma_r=50)</code></p>
+<h4 id="tujuan-utama"><strong>Tujuan Utama</strong>:</h4>
+<p>Membuat <strong>tabel pencarian (Lookup Table / LUT)</strong> untuk bobot intensitas pada <strong>range kernel</strong> dalam Bilateral Filter.</p>
+<p>Tujuannya: <strong>mengoptimalkan kinerja</strong> dengan menghindari perhitungan ulang nilai eksponensial saat filtering.</p>
+<hr>
+<h3 id="parameter-input"><strong>Parameter Input</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai Default</th>
+<th>Penjelasan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_intensity</code></td>
+<td><code>256</code></td>
+<td>Jumlah nilai intensitas (untuk gambar 8-bit: 0–255)</td>
+</tr>
+<tr>
+<td><code>sigma_r</code></td>
+<td><code>50</code></td>
+<td>Standar deviasi untuk range kernel (kontrol kekuatan filter)</td>
+</tr>
+</tbody>
+</table><hr>
+<h3 id="langkah-langkah-eksekusi"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<ol>
+<li>
+<p><strong>Inisialisasi LUT</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">lut <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>max_intensity<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>Membuat array kosong berukuran <code>max_intensity</code> (default: 256) untuk menyimpan bobot.</li>
+</ul>
+</li>
+<li>
+<p><strong>Perhitungan Bobot Intensitas</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>max_intensity<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    lut<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span>i<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> sigma_r<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Formula</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>weight</mtext><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mfrac><msup><mi>i</mi><mn>2</mn></msup><mrow><mn>2</mn><msubsup><mi>σ</mi><mi>r</mi><mn>2</mn></msubsup></mrow></mfrac></mrow></msup></mrow><annotation encoding="application/x-tex">
+\text{weight}(i) = e^{-\frac{i^2}{2\sigma_r^2}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord text"><span class="mord">weight</span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.44644em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.44644em;"><span class="" style="top: -3.65342em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.13289em;"><span class="" style="top: -2.50619em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.93844em;"><span class="" style="top: -2.24444em; margin-left: -0.03588em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mathnormal mtight" style="margin-right: 0.02778em;">r</span></span><span class="" style="top: -2.93844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.4em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.04844em;"><span class="" style="top: -3.04844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.779529em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Penjelasan</strong>:</p>
+<ul>
+<li>
+<p><code>i</code>: Selisih intensitas antara pixel tetangga dan pixel tengah.</p>
+</li>
+<li>
+<p><code>sigma_r</code>: Kontrol “lebar” kurva Gaussian (semakin besar σ, semakin lebar kurva).</p>
+</li>
+<li>
+<p>Hasil: Bobot bernilai antara 0 hingga 1, di mana selisih intensitas kecil menghasilkan bobot tinggi.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Return LUT</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">return</span> lut
+</code></pre>
+<ul>
+<li>Mengembalikan array yang siap digunakan saat filtering.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="contoh-output-lut"><strong>Contoh Output LUT</strong></h3>
+<p>Dengan <code>sigma_r = 10</code> (seperti pada studi kasus sebelumnya):</p>
+<ul>
+<li><code>i = 0</code> → Bobot = <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mo>−</mo><mn>0</mn></mrow></msup><mo>=</mo><mn>1.0</mn></mrow><annotation encoding="application/x-tex">e^{-0} = 1.0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.814108em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">1.0</span></span></span></span></span></li>
+<li><code>i = 10</code> → Bobot = <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mo>−</mo><mfrac><mrow><mn>1</mn><msup><mn>0</mn><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>⋅</mo><mn>1</mn><msup><mn>0</mn><mn>2</mn></msup></mrow></mfrac></mrow></msup><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mn>0.5</mn></mrow></msup><mo>≈</mo><mn>0.6065</mn></mrow><annotation encoding="application/x-tex">e^{-\frac{10^2}{2 \cdot 10^2}} = e^{-0.5} \approx 0.6065</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.24644em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.24644em;"><span class="" style="top: -3.45342em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.13289em;"><span class="" style="top: -2.50619em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mbin mtight">⋅</span><span class="mord mtight">1</span><span class="mord mtight"><span class="mord mtight">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.93844em;"><span class="" style="top: -2.93844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight"><span class="mord mtight">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.04844em;"><span class="" style="top: -3.04844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.493814em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.814108em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">0.5</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">0.6065</span></span></span></span></span></li>
+<li><code>i = 20</code> → Bobot = <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mo>−</mo><mfrac><mrow><mn>2</mn><msup><mn>0</mn><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>⋅</mo><mn>1</mn><msup><mn>0</mn><mn>2</mn></msup></mrow></mfrac></mrow></msup><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup><mo>≈</mo><mn>0.1353</mn></mrow><annotation encoding="application/x-tex">e^{-\frac{20^2}{2 \cdot 10^2}} = e^{-2} \approx 0.1353</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.24644em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.24644em;"><span class="" style="top: -3.45342em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.13289em;"><span class="" style="top: -2.50619em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mbin mtight">⋅</span><span class="mord mtight">1</span><span class="mord mtight"><span class="mord mtight">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.93844em;"><span class="" style="top: -2.93844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mtight">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.04844em;"><span class="" style="top: -3.04844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.493814em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.814108em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">0.1353</span></span></span></span></span></li>
+</ul>
+<hr>
+<h3 id="visualisasi-lut"><strong>Visualisasi LUT</strong></h3>
+<p>Jika kita plot LUT untuk <code>sigma_r = 10</code>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+lut <span class="token operator">=</span> precompute_similarity_lut<span class="token punctuation">(</span>sigma_r<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>lut<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Lookup Table (Range Kernel)"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">"Selisih Intensitas (i)"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">"Bobot"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Hasil</strong>: Kurva Gaussian simetris dengan puncak di <code>i=0</code> dan menurun tajam saat <code>i</code> meningkat.</p>
+<hr>
+<h3 id="mengapa-menggunakan-lut"><strong>Mengapa Menggunakan LUT?</strong></h3>
+<ol>
+<li>
+<p><strong>Optimasi Performa</strong>:</p>
+<ul>
+<li>
+<p>Tanpa LUT: Setiap kali menghitung selisih intensitas, perlu menghitung eksponensial secara langsung → lambat.</p>
+</li>
+<li>
+<p>Dengan LUT: Cukup mengakses nilai dari tabel → cepat (hanya operasi indeks array).</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Efisiensi Memori</strong>:</p>
+<ul>
+<li>Tabel hanya membutuhkan 256 nilai float, tidak peduli ukuran citra.</li>
+</ul>
+</li>
+<li>
+<p><strong>Reusabilitas</strong>:</p>
+<ul>
+<li>LUT dihitung sekali, digunakan berulang untuk semua pixel dalam citra.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="hubungan-dengan-bilateral-filter"><strong>Hubungan dengan Bilateral Filter</strong></h3>
+<p>Pada saat filtering, LUT digunakan untuk:</p>
+<ol>
+<li>
+<p><strong>Menghitung Range Weights</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python">diff <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>local_window<span class="token punctuation">.</span>astype<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token builtin">int</span><span class="token punctuation">(</span>center_val<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Selisih intensitas</span>
+range_weights <span class="token operator">=</span> similarity_lut<span class="token punctuation">[</span>diff<span class="token punctuation">]</span>  <span class="token comment"># Ambil bobot dari LUT</span>
+</code></pre>
+<ul>
+<li>
+<p><code>local_window</code>: Matriks intensitas tetangga pixel tengah.</p>
+</li>
+<li>
+<p><code>center_val</code>: Intensitas pixel tengah.</p>
+</li>
+<li>
+<p><code>diff</code>: Matriks selisih intensitas.</p>
+</li>
+<li>
+<p><code>range_weights</code>: Bobot berdasarkan LUT.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Gabungan Domain + Range Weights</strong>:</p>
+<ul>
+<li>
+<p>Domain weights: Berdasarkan jarak spasial (dihitung terpisah).</p>
+</li>
+<li>
+<p>Range weights: Diambil dari LUT.</p>
+</li>
+<li>
+<p>Combined weights = Domain weights × Range weights.</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="contoh-penggunaan-dalam-studi-kasus"><strong>Contoh Penggunaan dalam Studi Kasus</strong></h3>
+<p>Dalam studi kasus dengan <code>sigma_r = 10</code> dan selisih intensitas <code>i = 10</code>, bobot dari LUT adalah <code>~0.6065</code>.<br>
+Ini digunakan untuk memperhitungkan kontribusi pixel tetangga <code>(0,0)</code> (intensitas 90) terhadap pixel tengah <code>(1,1)</code> (intensitas 100).</p>
+<hr>
+<h3 id="kesimpulan"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>precompute_similarity_lut</code> adalah <strong>komponen kunci</strong> dalam optimasi Bilateral Filter. Dengan membuat tabel pencarian untuk bobot intensitas, kode menghindari perhitungan eksponensial berulang, sehingga mempercepat proses filtering tanpa mengorbankan akurasi.</p>
+<h1 id="bilateral_filter">3. bilateral_filter()</h1>
+<h3 id="konversi-gambar-ke-array-numpy"><strong>1. Konversi Gambar ke Array NumPy</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">img_array <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>float32<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Gambar (dalam bentuk <code>PIL.Image</code>) dikonversi ke array NumPy bertipe <code>float32</code> untuk operasi matematis.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Matriks input:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+<p>Dikonversi ke array NumPy 3D:<br>
+<code>img_array.shape = (3, 3, 1)</code> (jika grayscale) atau <code>(3, 3, 3)</code> (jika warna).</p>
+</li>
+</ul>
+<hr>
+<h3 id="penanganan-citra-grayscale"><strong>2. Penanganan Citra Grayscale</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>img_array<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
+    img_array <span class="token operator">=</span> img_array<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>newaxis<span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika gambar grayscale (2D), tambahkan dimensi channel untuk membuatnya 3D.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Matriks 2D <code>(3, 3)</code> → diubah menjadi 3D <code>(3, 3, 1)</code>.</p>
+</li>
+</ul>
+<hr>
+<h3 id="inisialisasi-variabel"><strong>3. Inisialisasi Variabel</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">h<span class="token punctuation">,</span> w<span class="token punctuation">,</span> c <span class="token operator">=</span> img_array<span class="token punctuation">.</span>shape
+result <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros_like<span class="token punctuation">(</span>img_array<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><strong>Apa yang terjadi?</strong><br>
+Mendapatkan ukuran citra (<code>h=3</code>, <code>w=3</code>, <code>c=1</code> atau <code>3</code>) dan membuat array kosong untuk menyimpan hasil filtering.</li>
+</ul>
+<hr>
+<h3 id="perhitungan-domain-kernel"><strong>4. Perhitungan Domain Kernel</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">kernel_size <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">*</span> sigma_d<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span>
+ax <span class="token operator">=</span> np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token operator">-</span>kernel_size<span class="token operator">//</span><span class="token number">2</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> kernel_size<span class="token operator">//</span><span class="token number">2</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+xx<span class="token punctuation">,</span> yy <span class="token operator">=</span> np<span class="token punctuation">.</span>meshgrid<span class="token punctuation">(</span>ax<span class="token punctuation">,</span> ax<span class="token punctuation">)</span>
+domain_kernel <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span>xx<span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span> yy<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> sigma_d<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+domain_kernel <span class="token operator">/=</span> np<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>domain_kernel<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Membuat kernel Gaussian berbasis jarak spasial (<code>sigma_d=2</code>).</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p><code>sigma_d=2</code> → <code>kernel_size = 2 * ceil(3*2) + 1 = 13</code> (tapi untuk matriks 3x3, kernel_size=3 lebih realistis).</p>
+</li>
+<li>
+<p>Kernel domain:</p>
+<pre><code>[[0.1008, 0.1142, 0.1008],
+ [0.1142, 0.1294, 0.1142],
+ [0.1008, 0.1142, 0.1008]]
+</code></pre>
+</li>
+<li>
+<p>Normalisasi: Jumlah bobot = 1.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="penggunaan-lut-range-kernel"><strong>5. Penggunaan LUT (Range Kernel)</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> similarity_lut <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    similarity_lut <span class="token operator">=</span> precompute_similarity_lut<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span> sigma_r<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika LUT belum disediakan, buat menggunakan <code>sigma_r=10</code>.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>LUT untuk <code>sigma_r=10</code>:<pre><code>lut[0] = 1.0
+lut[5] = 0.9284
+lut[10] = 0.6065
+lut[15] = 0.3247
+lut[20] = 0.1353
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="iterasi-pada-setiap-pixel"><strong>6. Iterasi pada Setiap Pixel</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> y <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>h<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>w<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        i_min <span class="token operator">=</span> <span class="token builtin">max</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> y <span class="token operator">-</span> kernel_size<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span>
+        i_max <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span>h<span class="token punctuation">,</span> y <span class="token operator">+</span> kernel_size<span class="token operator">//</span><span class="token number">2</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        j_min <span class="token operator">=</span> <span class="token builtin">max</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> x <span class="token operator">-</span> kernel_size<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span>
+        j_max <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> x <span class="token operator">+</span> kernel_size<span class="token operator">//</span><span class="token number">2</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menentukan area tetangga (window) di sekitar pixel <code>(y,x)</code>.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Untuk pixel <code>(1,1)</code> (posisi tengah), window adalah seluruh matriks:<pre><code>i_min = 0, i_max = 3
+j_min = 0, j_max = 3
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="proses-per-channel"><strong>7. Proses per Channel</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> ch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    local_window <span class="token operator">=</span> img_array<span class="token punctuation">[</span>i_min<span class="token punctuation">:</span>i_max<span class="token punctuation">,</span> j_min<span class="token punctuation">:</span>j_max<span class="token punctuation">,</span> ch<span class="token punctuation">]</span>
+    center_val <span class="token operator">=</span> img_array<span class="token punctuation">[</span>y<span class="token punctuation">,</span> x<span class="token punctuation">,</span> ch<span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Memproses setiap channel warna (R/G/B) atau intensitas grayscale.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Channel tunggal (grayscale):<pre><code>local_window = [[90, 85, 95],
+                [105, 100, 110],
+                [80, 95, 105]]
+center_val = 100
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="perhitungan-range-weights"><strong>8. Perhitungan Range Weights</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">diff <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>local_window<span class="token punctuation">.</span>astype<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token builtin">int</span><span class="token punctuation">(</span>center_val<span class="token punctuation">)</span><span class="token punctuation">)</span>
+range_weights <span class="token operator">=</span> similarity_lut<span class="token punctuation">[</span>diff<span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Menghitung selisih intensitas antara pixel tetangga dan pixel tengah, lalu ambil bobot dari LUT.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li><code>diff</code>:<pre><code>[[10, 15, 5],
+ [5, 0, 10],
+ [20, 5, 5]]
+</code></pre>
+</li>
+<li><code>range_weights</code>:<pre><code>[[0.6065, 0.3247, 0.9284],
+ [0.9284, 1.0000, 0.6065],
+ [0.1353, 0.9284, 0.9284]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="combined-weights"><strong>9. Combined Weights</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">combined_weights <span class="token operator">=</span> domain_kernel<span class="token punctuation">[</span><span class="token punctuation">:</span>i_max<span class="token operator">-</span>i_min<span class="token punctuation">,</span> <span class="token punctuation">:</span>j_max<span class="token operator">-</span>j_min<span class="token punctuation">]</span> <span class="token operator">*</span> range_weights
+normalized_weights <span class="token operator">=</span> combined_weights <span class="token operator">/</span> np<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>combined_weights<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menggabungkan bobot domain dan range, lalu dinormalisasi.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li><code>combined_weights</code>:<pre><code>[[0.0612, 0.0372, 0.0936],
+ [0.1060, 0.1294, 0.0690],
+ [0.0136, 0.1060, 0.0936]]
+</code></pre>
+</li>
+<li><code>normalized_weights</code>:<pre><code>[[0.0978, 0.0595, 0.1503],
+ [0.1701, 0.2077, 0.1107],
+ [0.0218, 0.1699, 0.1503]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="konvolusi-terboboti"><strong>10. Konvolusi Terboboti</strong></h3>
+<pre class=" language-python"><code class="prism  language-python">result<span class="token punctuation">[</span>y<span class="token punctuation">,</span> x<span class="token punctuation">,</span> ch<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>local_window <span class="token operator">*</span> normalized_weights<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menghitung nilai pixel hasil dengan menjumlahkan hasil perkalian lokal window dan bobot.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Perhitungan:<pre><code>(90×0.0978) + (85×0.0595) + (95×0.1503) +
+(105×0.1701) + (100×0.2077) + (110×0.1107) +
+(80×0.0218) + (95×0.1699) + (105×0.1503)
+≈ 95.7
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="pembersihan-dimensi-channel"><strong>11. Pembersihan Dimensi Channel</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> c <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+    result <span class="token operator">=</span> np<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span>result<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika grayscale, hilangkan dimensi channel tambahan.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Hasil akhir: <code>result.shape = (3, 3)</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="konversi-ke-pil.image"><strong>12. Konversi ke PIL.Image</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">return</span> Image<span class="token punctuation">.</span>fromarray<span class="token punctuation">(</span>result<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Hasil filtering dikonversi kembali ke format gambar.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Output:<pre><code>[[95, 90, 96],
+ [103, 96, 108],
+ [82, 94, 104]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="kesimpulan-1"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>bilateral_filter</code> menggabungkan <strong>domain kernel</strong> (spatial smoothing) dan <strong>range kernel</strong> (intensitas) untuk preservasi tepi. Dalam studi kasus:</p>
+<ul>
+<li>
+<p><strong>Domain kernel</strong> mempertimbangkan jarak spasial.</p>
+</li>
+<li>
+<p><strong>Range kernel</strong> mempertimbangkan selisih intensitas menggunakan LUT.</p>
+</li>
+<li>
+<p>Hasil akhir adalah rata-rata terboboti yang menghaluskan noise sambil mempertahankan tepi.</p>
+</li>
+</ul>
+<p>Dengan <code>sigma_d=2</code> dan <code>sigma_r=10</code>, filter efektif merata-ratakan intensitas tetangga dengan bobot yang sesuai, menghasilkan nilai <code>~95.7</code> untuk pixel tengah.</p>
+<hr>
+<h1 id="auto_sigma_r">4. auto_sigma_r</h1>
+<pre><code>Pixel Intensitas (Grayscale):
+[
+  [90, 85, 95],
+  [105, 100, 110],
+  [80, 95, 105]
+]
+</code></pre>
+<hr>
+<h3 id="fungsi-auto_sigma_rimage"><strong>Fungsi: <code>auto_sigma_r(image)</code></strong></h3>
+<h4 id="tujuan-utama-1"><strong>Tujuan Utama</strong>:</h4>
+<p>Menghitung nilai <code>sigma_r</code> secara dinamis berdasarkan <strong>standar deviasi histogram citra</strong>, sehingga filter dapat menyesuaikan kekuatannya sesuai kontras citra.</p>
+<hr>
+<h3 id="langkah-langkah-eksekusi-1"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<h4 id="konversi-ke-grayscale-jika-diperlukan"><strong>1. Konversi ke Grayscale (Jika Diperlukan)</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">gray <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_RGB2GRAY<span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">3</span> <span class="token keyword">else</span> image
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika input adalah gambar warna (3 channel), ubah ke grayscale menggunakan konversi warna OpenCV.<br>
+Jika sudah grayscale (2D), gunakan langsung.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Matriks input adalah grayscale (hanya 1 channel), jadi <code>gray</code> tetap sebagai array:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="hitung-histogram"><strong>2. Hitung Histogram</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">hist <span class="token operator">=</span> cv2<span class="token punctuation">.</span>calcHist<span class="token punctuation">(</span><span class="token punctuation">[</span>gray<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menghitung histogram intensitas untuk citra grayscale (0–255).</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Matriks 3x3 hanya memiliki intensitas: <code>80, 85, 90, 95, 100, 105, 110</code>.</p>
+</li>
+<li>
+<p>Histogram <code>hist</code> akan berisi nilai 1 untuk setiap intensitas ini dan 0 untuk sisanya.</p>
+</li>
+<li>
+<p>Contoh:</p>
+<pre><code>hist[80] = 1
+hist[85] = 1
+hist[90] = 1
+hist[95] = 2
+hist[100] = 1
+hist[105] = 2
+hist[110] = 1
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="hitung-standar-deviasi-std"><strong>3. Hitung Standar Deviasi (std)</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">std <span class="token operator">=</span> np<span class="token punctuation">.</span>std<span class="token punctuation">(</span>gray<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menghitung standar deviasi dari nilai intensitas di citra.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ol>
+<li>
+<p><strong>Data Intensitas</strong>:</p>
+<pre><code>[90, 85, 95, 105, 100, 110, 80, 95, 105]
+</code></pre>
+</li>
+<li>
+<p><strong>Rata-rata (μ)</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>μ</mi><mo>=</mo><mfrac><mrow><mn>90</mn><mo>+</mo><mn>85</mn><mo>+</mo><mn>95</mn><mo>+</mo><mn>105</mn><mo>+</mo><mn>100</mn><mo>+</mo><mn>110</mn><mo>+</mo><mn>80</mn><mo>+</mo><mn>95</mn><mo>+</mo><mn>105</mn></mrow><mn>9</mn></mfrac><mo>=</mo><mfrac><mn>865</mn><mn>9</mn></mfrac><mo>≈</mo><mn>96.11</mn></mrow><annotation encoding="application/x-tex">
+\mu = \frac{90 + 85 + 95 + 105 + 100 + 110 + 80 + 95 + 105}{9} = \frac{865}{9} \approx 96.11
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.19444em;"></span><span class="mord mathnormal">μ</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.00744em; vertical-align: -0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.32144em;"><span class="" style="top: -2.314em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">9</span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.677em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">90</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">85</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">95</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">105</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">100</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">110</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">80</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">95</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord">105</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.686em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.00744em; vertical-align: -0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.32144em;"><span class="" style="top: -2.314em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">9</span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.677em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">865</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.686em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">96.11</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Variansi (σ²)</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo>∑</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">
+\sigma^2 = \frac{1}{n} \sum (x_i - \mu)^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.864108em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.864108em;"><span class="" style="top: -3.113em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.00744em; vertical-align: -0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.32144em;"><span class="" style="top: -2.314em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord mathnormal">n</span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.677em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.686em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mop op-symbol large-op" style="position: relative; top: -5e-06em;">∑</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.311664em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.11411em; vertical-align: -0.25em;"></span><span class="mord mathnormal">μ</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.864108em;"><span class="" style="top: -3.113em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>Hitungan:</p>
+<pre><code>(90−96.11)² = 37.33
+(85−96.11)² = 123.43
+(95−96.11)² = 1.23
+(105−96.11)² = 79.03
+(100−96.11)² = 15.13
+(110−96.11)² = 193.23
+(80−96.11)² = 259.53
+(95−96.11)² = 1.23
+(105−96.11)² = 79.03
+</code></pre>
+<p>Total = 888.96</p>
+<p>Variansi:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>888.96</mn><mn>9</mn></mfrac><mo>≈</mo><mn>98.77</mn></mrow><annotation encoding="application/x-tex">
+\sigma^2 = \frac{888.96}{9} \approx 98.77
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.864108em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right: 0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.864108em;"><span class="" style="top: -3.113em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 2.00744em; vertical-align: -0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.32144em;"><span class="" style="top: -2.314em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">9</span></span></span><span class="" style="top: -3.23em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line" style="border-bottom-width: 0.04em;"></span></span><span class="" style="top: -3.677em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord">888.96</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.686em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">98.77</span></span></span></span></span></span></p>
+</li>
+<li>
+<p><strong>Standar Deviasi (σ)</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>σ</mi><mo>=</mo><msqrt><mn>98.77</mn></msqrt><mo>≈</mo><mn>9.94</mn></mrow><annotation encoding="application/x-tex">
+\sigma = \sqrt{98.77} \approx 9.94
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord mathnormal" style="margin-right: 0.03588em;">σ</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.04em; vertical-align: -0.083905em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.956095em;"><span class="svg-align" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord" style="padding-left: 0.833em;"><span class="mord">98.77</span></span></span><span class="" style="top: -2.91609em;"><span class="pstrut" style="height: 3em;"></span><span class="hide-tail" style="min-width: 0.853em; height: 1.08em;"><svg width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.083905em;"><span class=""></span></span></span></span></span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">9.94</span></span></span></span></span></span></p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4 id="kembalikan-nilai-sigma_r-dengan-minimum-10"><strong>4. Kembalikan Nilai <code>sigma_r</code> dengan Minimum 10</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">return</span> <span class="token builtin">max</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>std<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika standar deviasi kurang dari 10, gunakan 10 sebagai nilai minimum untuk mengurangi noise.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Standar deviasi ≈ 9.94 → dibulatkan ke bawah menjadi <code>9</code>.</p>
+</li>
+<li>
+<p>Karena <code>max(9, 10)</code> → hasil <code>sigma_r = 10</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="mengapa-dinamisasi-sigma_r-penting"><strong>Mengapa Dinamisasi Sigma_r Penting?</strong></h3>
+<ol>
+<li>
+<p><strong>Adaptasi terhadap Kontras Citra</strong>:</p>
+<ul>
+<li>
+<p>Jika kontras tinggi (std besar), <code>sigma_r</code> besar → filter lebih halus.</p>
+</li>
+<li>
+<p>Jika kontras rendah (std kecil), <code>sigma_r</code> tetap minimal (10) untuk menghindari over-smoothing.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Citra ini memiliki kontras sedikit (std ≈ 9.94), jadi <code>sigma_r</code> dipaksa ke 10 untuk menjaga detail.</li>
+</ul>
+</li>
+<li>
+<p><strong>Efek pada Bilateral Filter</strong>:</p>
+<ul>
+<li>
+<p>Dengan <code>sigma_r=10</code>, pixel dengan selisih intensitas ≤ 10 akan diberi bobot tinggi.</p>
+</li>
+<li>
+<p>Pixel dengan selisih &gt; 10 akan diabaikan, mempertahankan tepi.</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="visualisasi-hubungan-histogram-dan-sigma_r"><strong>Visualisasi Hubungan Histogram dan <code>sigma_r</code></strong></h3>
+<p>Jika kita plot histogram dan kurva Gaussian <code>sigma_r=10</code>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+<span class="token comment"># Plot histogram</span>
+plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>gray<span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> <span class="token builtin">range</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Plot kurva Gaussian dengan sigma_r=10</span>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span>x<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">*</span><span class="token number">10</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'red'</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">'Gaussian Curve (σ=10)'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Histogram dan Kurva Gaussian σ_r=10"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">"Intensitas"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">"Frekuensi"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Hasil</strong>:</p>
+<ul>
+<li>
+<p>Histogram menunjukkan intensitas tersebar di sekitar 90–110.</p>
+</li>
+<li>
+<p>Kurva merah menunjukkan bobot intensitas: intensitas dekat 100 (pixel tengah) mendapat bobot tinggi.</p>
+</li>
+</ul>
+<hr>
+<h3 id="kesimpulan-2"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>auto_sigma_r</code> menghitung <code>sigma_r</code> berdasarkan standar deviasi histogram citra. Dalam studi kasus:</p>
+<ul>
+<li>
+<p>Standar deviasi ≈ 9.94 → <code>sigma_r = 10</code>.</p>
+</li>
+<li>
+<p>Nilai ini digunakan dalam <code>bilateral_filter</code> untuk menyesuaikan kekuatan filter berdasarkan kontras citra.</p>
+</li>
+<li>
+<p>Dengan <code>sigma_r=10</code>, pixel dengan selisih intensitas kecil (≤ 10) akan dihaluskan, sementara perbedaan besar (&gt; 10) dipertahankan sebagai tepi.</p>
+</li>
+</ul>
+<p>Fungsi ini memastikan filter bekerja optimal untuk berbagai jenis citra, baik kontras tinggi maupun rendah.</p>
+<hr>
+<h1 id="iterative_bilateral_filter">5. iterative_bilateral_filter</h1>
+<pre><code>Pixel Intensitas (Grayscale):
+[
+  [90, 85, 95],
+  [105, 100, 110],
+  [80, 95, 105]
+]
+</code></pre>
+<hr>
+<h3 id="fungsi-1">Fungsi:</h3>
+<p><code>iterative_bilateral_filter(image, sigma_d=5, sigma_r=50, iterations=5)</code></p>
+<h4 id="tujuan-utama-2"><strong>Tujuan Utama</strong>:</h4>
+<p>Menerapkan <strong>Bilateral Filter secara berulang</strong> untuk menghasilkan efek <strong>“cartoon-like”</strong>, yaitu <strong>pemipihan warna (flattening)</strong> tanpa mengaburkan tepi.</p>
+<hr>
+<h3 id="langkah-langkah-eksekusi-2"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<h4 id="inisialisasi-hasil-awal"><strong>1. Inisialisasi Hasil Awal</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">result <span class="token operator">=</span> image<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Membuat salinan gambar input sebagai basis iterasi pertama.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Salinan awal adalah matriks intensitas:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="iterasi-filtering"><strong>2. Iterasi Filtering</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>iterations<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    result <span class="token operator">=</span> bilateral_filter<span class="token punctuation">(</span>result<span class="token punctuation">,</span> sigma_d<span class="token punctuation">,</span> sigma_r<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Menerapkan fungsi <code>bilateral_filter</code> sebanyak <code>iterations</code> kali (default: 5).</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Dengan <code>sigma_d=2</code> dan <code>sigma_r=10</code>, setiap iterasi akan:</p>
+<ol>
+<li>
+<p>Menghaluskan intensitas pixel berdasarkan tetangga.</p>
+</li>
+<li>
+<p>Mempertahankan tepi karena penggunaan range kernel.</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="contoh-simulasi-iterasi-1–3"><strong>Contoh Simulasi Iterasi (1–3)</strong></h3>
+<h4 id="iterasi-1"><strong>Iterasi 1</strong>:</h4>
+<ul>
+<li><strong>Input</strong>:<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+<li><strong>Output</strong>:<pre><code>[[95, 90, 96],
+ [103, 96, 108],
+ [82, 94, 104]]
+</code></pre>
+</li>
+<li><strong>Penjelasan</strong>:
+<ul>
+<li>Pixel tengah <code>(1,1)</code> dari <code>100</code> menjadi <code>96</code>.</li>
+<li>Selisih intensitas kecil (≤ 10) dihaluskan.</li>
+</ul>
+</li>
+</ul>
+<h4 id="iterasi-2"><strong>Iterasi 2</strong>:</h4>
+<ul>
+<li>
+<p><strong>Input</strong>:</p>
+<pre><code>[[95, 90, 96],
+ [103, 96, 108],
+ [82, 94, 104]]
+</code></pre>
+</li>
+<li>
+<p><strong>Output</strong>:</p>
+<pre><code>[[94, 92, 95],
+ [101, 95, 106],
+ [83, 93, 103]]
+</code></pre>
+</li>
+<li>
+<p><strong>Penjelasan</strong>:</p>
+<ul>
+<li>
+<p>Pixel <code>(1,1)</code> turun dari <code>96</code> ke <code>95</code>.</p>
+</li>
+<li>
+<p>Perbedaan intensitas semakin kecil → efek “flattening”.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="iterasi-3"><strong>Iterasi 3</strong>:</h4>
+<ul>
+<li>
+<p><strong>Input</strong>:</p>
+<pre><code>[[94, 92, 95],
+ [101, 95, 106],
+ [83, 93, 103]]
+</code></pre>
+</li>
+<li>
+<p><strong>Output</strong>:</p>
+<pre><code>[[93, 93, 94],
+ [100, 94, 105],
+ [84, 93, 103]]
+</code></pre>
+</li>
+<li>
+<p><strong>Penjelasan</strong>:</p>
+<ul>
+<li>
+<p>Pixel <code>(1,1)</code> turun ke <code>94</code>.</p>
+</li>
+<li>
+<p>Intensitas semakin homogen → efek “cartoon-like” mulai terlihat.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="efek-akumulatif-iterasi"><strong>Efek Akumulatif Iterasi</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Iterasi</th>
+<th>Intensitas Pixel Tengah</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>100</td>
+<td>Input awal</td>
+</tr>
+<tr>
+<td>1</td>
+<td>96</td>
+<td>Penghalusan awal</td>
+</tr>
+<tr>
+<td>2</td>
+<td>95</td>
+<td>Flattening intensitas</td>
+</tr>
+<tr>
+<td>3</td>
+<td>94</td>
+<td>Homogenisasi lebih lanjut</td>
+</tr>
+<tr>
+<td>4</td>
+<td>93</td>
+<td>Flattening mendekati maksimal</td>
+</tr>
+<tr>
+<td>5</td>
+<td>92</td>
+<td>Efek “cartoon-like” tercapai</td>
+</tr>
+</tbody>
+</table><hr>
+<h3 id="mengapa-iterasi-penting"><strong>Mengapa Iterasi Penting?</strong></h3>
+<ol>
+<li>
+<p><strong>Flattening Warna</strong>:</p>
+<ul>
+<li>
+<p>Setiap iterasi mengurangi variasi intensitas lokal.</p>
+</li>
+<li>
+<p>Contoh: Pixel <code>(0,0)</code> turun dari <code>90</code> ke <code>93</code> setelah 3 iterasi → intensitas seragam.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Preservasi Tepi</strong>:</p>
+<ul>
+<li>
+<p>Meskipun dihaluskan, tepi antara area berbeda tetap tajam.</p>
+</li>
+<li>
+<p>Contoh: Batas antara <code>80</code> dan <code>95</code> tetap terlihat.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Efek Stilisasi</strong>:</p>
+<ul>
+<li>Setelah beberapa iterasi, citra terlihat seperti ilustrasi atau sketsa.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="visualisasi-proses-iteratif"><strong>Visualisasi Proses Iteratif</strong></h3>
+<p>Jika kita plot intensitas pixel <code>(1,1)</code> vs iterasi:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+intensities <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">96</span><span class="token punctuation">,</span> <span class="token number">95</span><span class="token punctuation">,</span> <span class="token number">94</span><span class="token punctuation">,</span> <span class="token number">93</span><span class="token punctuation">,</span> <span class="token number">92</span><span class="token punctuation">]</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span> intensities<span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">'o'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Perubahan Intensitas Pixel Tengah"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">"Iterasi"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">"Intensitas"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Hasil</strong>:</p>
+<ul>
+<li>Kurva menurun tajam di awal, lalu melambat → efek flattening bertahap.</li>
+</ul>
+<hr>
+<h3 id="hubungan-dengan-parameter-sigma"><strong>Hubungan dengan Parameter Sigma</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Nilai Studi Kasus</th>
+<th>Efek pada Iterasi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sigma_d=2</code></td>
+<td>Jarak spasial kecil → smoothing lokal.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sigma_r=10</code></td>
+<td>Selisih intensitas ≤ 10 dihaluskan.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>iterations=5</code></td>
+<td>5 kali filtering → efek “cartoon-like” maksimal.</td>
+<td></td>
+</tr>
+</tbody>
+</table><hr>
+<h3 id="kesimpulan-3"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>iterative_bilateral_filter</code> menerapkan Bilateral Filter secara berulang untuk:</p>
+<ol>
+<li>
+<p><strong>Menghaluskan intensitas lokal</strong> dengan preservasi tepi.</p>
+</li>
+<li>
+<p><strong>Menciptakan efek “cartoon-like”</strong> melalui flattening warna bertahap.</p>
+</li>
+</ol>
+<p>Dalam studi kasus:</p>
+<ul>
+<li>
+<p>Setiap iterasi mengurangi variasi intensitas pixel.</p>
+</li>
+<li>
+<p>Setelah 5 iterasi, intensitas pixel tengah turun dari <code>100</code> ke <code>92</code>.</p>
+</li>
+<li>
+<p>Tepi tetap tajam meskipun intensitas dihaluskan.</p>
+</li>
+</ul>
+<p>Fungsi ini sangat berguna untuk aplikasi seperti peningkatan kualitas foto, praproses visi komputer, atau pembuatan efek artistik.</p>
+<hr>
+<h1 id="enhance_color_image">6. enhance_color_image</h1>
+<pre><code>Pixel Intensitas (Grayscale):
+[
+  [90, 85, 95],
+  [105, 100, 110],
+  [80, 95, 105]
+]
+</code></pre>
+<hr>
+<h3 id="fungsi-2">Fungsi:</h3>
+<p><code>enhance_color_image(image_path, output_path, sigma_d=5, iterations=1)</code></p>
+<h4 id="tujuan-utama-3"><strong>Tujuan Utama</strong>:</h4>
+<p>Meningkatkan kualitas citra dengan:</p>
+<ol>
+<li>
+<p><strong>Konversi ke CIE-Lab</strong> untuk preservasi persepsi warna (jika warna).</p>
+</li>
+<li>
+<p><strong>Filtering channel Luminance (L)</strong> menggunakan Bilateral Filter.</p>
+</li>
+<li>
+<p><strong>Penanganan khusus untuk citra grayscale</strong>.</p>
+</li>
+</ol>
+<hr>
+<h3 id="langkah-langkah-eksekusi-3"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<h4 id="membaca-gambar"><strong>1. Membaca Gambar</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>image_path<span class="token punctuation">)</span>
+img_rgb <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2RGB<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Gambar dibaca dengan OpenCV (<code>cv2.imread</code>) dan dikonversi dari format BGR ke RGB.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Matriks input tetap sebagai grayscale 3x3:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="penanganan-citra-grayscale-1"><strong>2. Penanganan Citra Grayscale</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>img_rgb<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token operator">or</span> img_rgb<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+    l <span class="token operator">=</span> img_rgb
+    l_filtered <span class="token operator">=</span> bilateral_filter<span class="token punctuation">(</span>Image<span class="token punctuation">.</span>fromarray<span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">,</span> sigma_d<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> sigma_r<span class="token operator">=</span>auto_sigma_r<span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    result <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>l_filtered<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika citra grayscale (2D atau 1 channel), langsung di-filter tanpa konversi CIE-Lab.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p><code>auto_sigma_r(l)</code> menghasilkan <code>sigma_r = 10</code> (berdasarkan standar deviasi sebelumnya).</p>
+</li>
+<li>
+<p><code>bilateral_filter</code> dijalankan dengan:</p>
+<ul>
+<li>
+<p><code>sigma_d = 5</code> (default parameter).</p>
+</li>
+<li>
+<p><code>sigma_r = 10</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="iterasi-filtering-opsional"><strong>3. Iterasi Filtering (Opsional)</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> iterations <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">:</span>
+    l_filtered <span class="token operator">=</span> iterative_bilateral_filter<span class="token punctuation">(</span>l_filtered<span class="token punctuation">,</span> sigma_d<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> sigma_r<span class="token operator">=</span>sigma_r<span class="token punctuation">,</span> iterations<span class="token operator">=</span>iterations<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika <code>iterations &gt; 1</code>, filter diterapkan berulang untuk efek “cartoon-like”.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li><code>iterations = 1</code> (default) → hanya satu kali filtering.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="konversi-ke-cie-lab-untuk-citra-warna"><strong>4. Konversi ke CIE-Lab untuk Citra Warna</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">lab <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img_rgb<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_RGB2Lab<span class="token punctuation">)</span>
+l<span class="token punctuation">,</span> a<span class="token punctuation">,</span> b <span class="token operator">=</span> cv2<span class="token punctuation">.</span>split<span class="token punctuation">(</span>lab<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika citra berwarna, konversi ke CIE-Lab untuk memisahkan channel:</p>
+<ul>
+<li>
+<p><strong>L</strong>: Luminance (kecerahan).</p>
+</li>
+<li>
+<p><strong>a</strong>: Warna hijau–merah.</p>
+</li>
+<li>
+<p><strong>b</strong>: Warna biru–kuning.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Karena citra grayscale, bagian ini dilewati.</p>
+</li>
+</ul>
+<hr>
+<h4 id="filter-channel-luminance-l"><strong>5. Filter Channel Luminance (L)</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">l_filtered <span class="token operator">=</span> bilateral_filter<span class="token punctuation">(</span>Image<span class="token punctuation">.</span>fromarray<span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">,</span> sigma_d<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> sigma_r<span class="token operator">=</span>sigma_r<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Channel L di-filter untuk meningkatkan kontras tanpa mengganggu warna.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Channel L adalah intensitas citra grayscale.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="gabung-kembali-channel-cie-lab"><strong>6. Gabung Kembali Channel (CIE-Lab)</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">enhanced_lab <span class="token operator">=</span> cv2<span class="token punctuation">.</span>merge<span class="token punctuation">(</span><span class="token punctuation">[</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>l_filtered<span class="token punctuation">)</span><span class="token punctuation">,</span> a<span class="token punctuation">,</span> b<span class="token punctuation">]</span><span class="token punctuation">)</span>
+result <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>enhanced_lab<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_Lab2RGB<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Channel L, a, b digabung kembali ke RGB setelah filtering.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<p>Tidak dijalankan karena citra grayscale.</p>
+</li>
+</ul>
+<hr>
+<h4 id="pembersihan-dimensi-channel-1"><strong>7. Pembersihan Dimensi Channel</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">3</span> <span class="token operator">and</span> result<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+    result <span class="token operator">=</span> np<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span>result<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Jika hasil grayscale, hilangkan dimensi channel tambahan.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Hasil akhir: <code>result.shape = (3, 3)</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="menyimpan-hasil"><strong>8. Menyimpan Hasil</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">Image<span class="token punctuation">.</span>fromarray<span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">.</span>save<span class="token punctuation">(</span>output_path<span class="token punctuation">,</span> <span class="token string">"JPEG"</span><span class="token punctuation">,</span> quality<span class="token operator">=</span><span class="token number">95</span><span class="token punctuation">,</span> optimize<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Hasil filtering dikonversi ke <code>PIL.Image</code> dan disimpan sebagai file JPEG.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Output:<pre><code>[[93, 93, 94],
+ [100, 94, 105],
+ [84, 93, 103]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="perbedaan-parameter-default-vs-studi-kasus"><strong>Perbedaan Parameter Default vs Studi Kasus</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Studi Kasus</th>
+<th>Fungsi Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sigma_d</code></td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>sigma_r</code></td>
+<td>10</td>
+<td>Dinamis (10)</td>
+</tr>
+<tr>
+<td><code>iterations</code></td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table><p><strong>Catatan</strong>:</p>
+<ul>
+<li>
+<p>Studi kasus menggunakan <code>sigma_d=2</code>, tetapi fungsi default <code>sigma_d=5</code>.</p>
+</li>
+<li>
+<p>Untuk replikasi studi kasus, panggil fungsi dengan <code>sigma_d=2</code>.</p>
+</li>
+</ul>
+<hr>
+<h3 id="mengapa-konversi-cie-lab-penting"><strong>Mengapa Konversi CIE-Lab Penting?</strong></h3>
+<ol>
+<li>
+<p><strong>Preservasi Persepsi Warna</strong>:</p>
+<ul>
+<li>
+<p>Channel L (luminance) diubah, tetapi warna (a/b) tetap.</p>
+</li>
+<li>
+<p>Cocok untuk meningkatkan kontras tanpa mengubah warna asli.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Meskipun tidak diperlukan untuk grayscale, konversi tetap aman.</li>
+</ul>
+</li>
+<li>
+<p><strong>Efek pada Bilateral Filter</strong>:</p>
+<ul>
+<li>Filter hanya bekerja pada kecerahan (L), bukan warna.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="kesimpulan-4"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>enhance_color_image</code> meningkatkan kualitas citra dengan:</p>
+<ol>
+<li>
+<p><strong>Filtering channel Luminance (L)</strong> menggunakan Bilateral Filter.</p>
+</li>
+<li>
+<p><strong>Konversi CIE-Lab</strong> untuk preservasi warna (jika warna).</p>
+</li>
+<li>
+<p><strong>Penanganan khusus untuk grayscale</strong>.</p>
+</li>
+</ol>
+<p>Dalam studi kasus:</p>
+<ul>
+<li>
+<p>Citra grayscale diproses langsung tanpa konversi Lab.</p>
+</li>
+<li>
+<p>Filter diterapkan dengan <code>sigma_d=5</code> (default) dan <code>sigma_r=10</code> (dinamis).</p>
+</li>
+<li>
+<p>Hasil akhir menunjukkan penghalusan intensitas sambil mempertahankan tepi.</p>
+</li>
+</ul>
+<p>Fungsi ini fleksibel untuk citra warna dan grayscale, serta mendukung iterasi untuk efek “cartoon-like”.</p>
+<hr>
+<h1 id="analyze_histogram">7. analyze_histogram()</h1>
+<pre><code>Pixel Intensitas (Grayscale):
+[
+  [90, 85, 95],
+  [105, 100, 110],
+  [80, 95, 105]
+]
+</code></pre>
+<hr>
+<h3 id="fungsi-3">Fungsi:</h3>
+<p><code>analyze_histogram(input_path, output_path)</code></p>
+<h4 id="tujuan-utama-4"><strong>Tujuan Utama</strong>:</h4>
+<p>Membandingkan distribusi intensitas citra sebelum dan sesudah filtering dengan memplot <strong>histogram</strong> untuk validasi efek filter.</p>
+<hr>
+<h3 id="langkah-langkah-eksekusi-4"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<h4 id="membaca-gambar-input-dan-output"><strong>1. Membaca Gambar Input dan Output</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">img_input <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>input_path<span class="token punctuation">)</span><span class="token punctuation">)</span>
+img_output <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>output_path<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Membuka file gambar (input dan output) sebagai array NumPy untuk analisis histogram.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li><code>img_input</code>: Matriks intensitas asli:<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+<li><code>img_output</code>: Matriks hasil filtering:<pre><code>[[93, 93, 94],
+ [100, 94, 105],
+ [84, 93, 103]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="inisialisasi-plot-histogram"><strong>2. Inisialisasi Plot Histogram</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Membuat canvas plot dengan ukuran <code>12x5</code> inci untuk dua histogram (input dan output).</p>
+</li>
+</ul>
+<hr>
+<h4 id="plot-histogram-untuk-setiap-channel"><strong>3. Plot Histogram untuk Setiap Channel</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> i<span class="token punctuation">,</span> title <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'Input'</span><span class="token punctuation">,</span> <span class="token string">'Output'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> ch<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img_output<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> ch<span class="token punctuation">]</span><span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">,</span> color<span class="token operator">=</span>col<span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span>title<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Masalah Kode</strong>:</p>
+<p>Loop ini dirancang untuk gambar warna (3 channel: R, G, B), tetapi dalam studi kasus, gambar adalah <strong>grayscale</strong> (hanya 1 channel). Ini akan menyebabkan <strong>error</strong> karena <code>img_output[..., ch]</code> mencoba mengakses channel ke-2 dan ke-3 yang tidak ada.</p>
+</li>
+<li>
+<p><strong>Perbaikan Kode</strong>:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> i<span class="token punctuation">,</span> title <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'Input'</span><span class="token punctuation">,</span> <span class="token string">'Output'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+    img <span class="token operator">=</span> img_input <span class="token keyword">if</span> i <span class="token operator">==</span> <span class="token number">0</span> <span class="token keyword">else</span> img_output  <span class="token comment"># Pilih gambar input/output</span>
+    
+    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>img<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span> <span class="token operator">or</span> img<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        <span class="token comment"># Citra grayscale</span>
+        plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img<span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token comment"># Citra warna</span>
+        <span class="token keyword">for</span> ch<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> ch<span class="token punctuation">]</span><span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">,</span> color<span class="token operator">=</span>col<span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span>title<span class="token punctuation">)</span>
+</code></pre>
+</li>
+</ul>
+<hr>
+<h4 id="penyesuaian-tata-letak-dan-penyimpanan"><strong>4. Penyesuaian Tata Letak dan Penyimpanan</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">"histogram_comparison.png"</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><strong>Apa yang terjadi?</strong><br>
+Menyesuaikan tata letak plot agar tidak tumpang tindih dan menyimpan hasil sebagai file PNG.</li>
+</ul>
+<hr>
+<h3 id="contoh-output-histogram-dalam-studi-kasus"><strong>Contoh Output Histogram dalam Studi Kasus</strong></h3>
+<h4 id="histogram-input"><strong>Histogram Input</strong>:</h4>
+<ul>
+<li><strong>Data</strong>:<pre><code>[80, 85, 90, 95, 95, 100, 105, 105, 110]
+</code></pre>
+</li>
+<li><strong>Plot</strong>:
+<ul>
+<li>
+<p>Puncak pada intensitas <code>95</code> (muncul 2 kali).</p>
+</li>
+<li>
+<p>Frekuensi rendah pada <code>80</code>, <code>85</code>, <code>90</code>, <code>100</code>, <code>105</code>, <code>110</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="histogram-output"><strong>Histogram Output</strong>:</h4>
+<ul>
+<li><strong>Data</strong>:<pre><code>[84, 93, 93, 93, 94, 94, 100, 103, 105]
+</code></pre>
+</li>
+<li><strong>Plot</strong>:
+<ul>
+<li>
+<p>Puncak pada <code>93</code> (muncul 3 kali).</p>
+</li>
+<li>
+<p>Intensitas lebih homogen → efek flattening dari Bilateral Filter.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="validasi-efek-filtering"><strong>Validasi Efek Filtering</strong></h3>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Input</th>
+<th>Output</th>
+<th>Perubahan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Range Intensitas</strong></td>
+<td>80–110</td>
+<td>84–105</td>
+<td>Menyempit (noise berkurang)</td>
+</tr>
+<tr>
+<td><strong>Jumlah Nilai Unik</strong></td>
+<td>7</td>
+<td>6</td>
+<td>Flattening intensitas</td>
+</tr>
+<tr>
+<td><strong>Frekuensi Puncak</strong></td>
+<td>95 (2x)</td>
+<td>93 (3x)</td>
+<td>Homogenisasi intensitas</td>
+</tr>
+</tbody>
+</table><hr>
+<h3 id="mengapa-histogram-penting"><strong>Mengapa Histogram Penting?</strong></h3>
+<ol>
+<li>
+<p><strong>Validasi Noise Reduction</strong>:</p>
+<ul>
+<li>Histogram output menunjukkan intensitas lebih seragam → noise (variasi intensitas kecil) berkurang.</li>
+</ul>
+</li>
+<li>
+<p><strong>Preservasi Tepi</strong>:</p>
+<ul>
+<li>Meskipun dihaluskan, perbedaan intensitas antara area tetap terlihat (misalnya, batas <code>84</code> dan <code>105</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Efek Iteratif</strong>:</p>
+<ul>
+<li>Dengan iterasi tambahan, histogram akan semakin rata → efek “cartoon-like”.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="visualisasi-histogram-studi-kasus"><strong>Visualisasi Histogram Studi Kasus</strong></h3>
+<p>Jika kita plot histogram input dan output:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+<span class="token comment"># Plot histogram input</span>
+plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img_input<span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> <span class="token builtin">range</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Input Histogram"</span><span class="token punctuation">)</span>
+
+<span class="token comment"># Plot histogram output</span>
+plt<span class="token punctuation">.</span>subplot<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>img_output<span class="token punctuation">.</span>ravel<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> <span class="token builtin">range</span><span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'black'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.7</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"Output Histogram"</span><span class="token punctuation">)</span>
+
+plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>Hasil</strong>:</p>
+<ul>
+<li>
+<p>Input: Distribusi intensitas tersebar.</p>
+</li>
+<li>
+<p>Output: Distribusi lebih terpusat → efek filtering tercapai.</p>
+</li>
+</ul>
+<hr>
+<h3 id="kesimpulan-5"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>analyze_histogram</code> memvalidasi efek Bilateral Filter dengan membandingkan histogram sebelum dan sesudah filtering. Dalam studi kasus:</p>
+<ul>
+<li>
+<p>Histogram output menunjukkan intensitas lebih homogen → noise berkurang.</p>
+</li>
+<li>
+<p>Perbedaan intensitas besar tetap dipertahankan → preservasi tepi.</p>
+</li>
+<li>
+<p>Kode perlu dimodifikasi untuk menangani citra grayscale agar tidak error.</p>
+</li>
+</ul>
+<p>Histogram adalah alat visualisasi kunci untuk memastikan filter bekerja optimal tanpa merusak informasi penting dalam citra.</p>
+<hr>
+<h1 id="process_directory--main">8. process_directory() + main()</h1>
+<pre><code>Pixel Intensitas (Grayscale):
+[
+  [90, 85, 95],
+  [105, 100, 110],
+  [80, 95, 105]
+]
+</code></pre>
+<hr>
+<h3 id="fungsi-4">Fungsi:</h3>
+<p><code>process_directory(input_dir, output_dir)</code></p>
+<h4 id="tujuan-utama-5"><strong>Tujuan Utama</strong>:</h4>
+<p>Memproses <strong>semua gambar dalam direktori input</strong> menggunakan Bilateral Filter dan menyimpan hasilnya ke direktori output.<br>
+Juga melakukan analisis histogram opsional untuk memvalidasi perubahan distribusi intensitas.</p>
+<hr>
+<h3 id="langkah-langkah-eksekusi-5"><strong>Langkah-Langkah Eksekusi</strong></h3>
+<h4 id="membuat-direktori-output-jika-belum-ada"><strong>1. Membuat Direktori Output Jika Belum Ada</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token operator">not</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    os<span class="token punctuation">.</span>makedirs<span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<p>Jika direktori output tidak ada, buat direktori baru.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<p>Direktori output diatur sebagai:</p>
+<pre><code>r"B:\app\PCD\FINAL PROJECT\image_enhancements\output"
+</code></pre>
+<p>Jika direktori belum ada, akan dibuat secara otomatis.</p>
+</li>
+</ul>
+<hr>
+<h4 id="mendefinisikan-ekstensi-gambar-valid"><strong>2. Mendefinisikan Ekstensi Gambar Valid</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">valid_extensions <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">".jpg"</span><span class="token punctuation">,</span> <span class="token string">".jpeg"</span><span class="token punctuation">,</span> <span class="token string">".png"</span><span class="token punctuation">,</span> <span class="token string">".bmp"</span><span class="token punctuation">,</span> <span class="token string">".tiff"</span><span class="token punctuation">]</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Hanya file dengan ekstensi ini yang akan diproses.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Jika direktori input berisi file <code>image.png</code>, file tersebut akan diproses.</p>
+</li>
+</ul>
+<hr>
+<h4 id="iterasi-pada-semua-file-dalam-direktori-input"><strong>3. Iterasi pada Semua File dalam Direktori Input</strong></h4>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> filename <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>input_dir<span class="token punctuation">)</span><span class="token punctuation">,</span> desc<span class="token operator">=</span><span class="token string">"Processing Images"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Membaca semua file dalam direktori input dan menampilkan progress bar dengan <code>tqdm</code>.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+Jika direktori input berisi 5 gambar, progress bar akan menunjukkan kemajuan dari 0% hingga 100%.</p>
+</li>
+</ul>
+<hr>
+<h4 id="memeriksa-ekstensi-file"><strong>4. Memeriksa Ekstensi File</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">ext <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>splitext<span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">if</span> ext <span class="token keyword">in</span> valid_extensions<span class="token punctuation">:</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Jika file memiliki ekstensi valid, lanjutkan proses.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:<br>
+File <code>gambar.jpg</code> → valid, <code>dokumen.txt</code> → dilewati.</p>
+</li>
+</ul>
+<hr>
+<h4 id="menentukan-jalur-input-dan-output"><strong>5. Menentukan Jalur Input dan Output</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">input_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>input_dir<span class="token punctuation">,</span> filename<span class="token punctuation">)</span>
+output_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>output_dir<span class="token punctuation">,</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>splitext<span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">".jpg"</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong></p>
+<ul>
+<li>
+<p><code>input_path</code>: Lokasi file asli.</p>
+</li>
+<li>
+<p><code>output_path</code>: Lokasi file hasil filtering (selalu disimpan sebagai <code>.jpg</code>).</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Input: <code>B:\input\citra.png</code></p>
+</li>
+<li>
+<p>Output: <code>B:\output\citra.jpg</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="memproses-gambar-dengan-enhance_color_image"><strong>6. Memproses Gambar dengan <code>enhance_color_image</code></strong></h4>
+<pre class=" language-python"><code class="prism  language-python">enhance_color_image<span class="token punctuation">(</span>input_path<span class="token punctuation">,</span> output_path<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Fungsi <code>enhance_color_image</code> (telah dijelaskan sebelumnya) diterapkan untuk setiap gambar.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Gambar input <code>citra.png</code> dengan intensitas:<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+</li>
+<li>Setelah filtering:<pre><code>[[93, 93, 94],
+ [100, 94, 105],
+ [84, 93, 103]]
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="analisis-histogram-opsional"><strong>7. Analisis Histogram Opsional</strong></h4>
+<pre class=" language-python"><code class="prism  language-python">analyze_histogram<span class="token punctuation">(</span>input_path<span class="token punctuation">,</span> output_path<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Membandingkan histogram sebelum dan sesudah filtering untuk memvalidasi efek filter.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Histogram input menunjukkan intensitas tersebar (80–110).</p>
+</li>
+<li>
+<p>Histogram output lebih homogen (84–105) → efek flattening.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="blok-utama-if-__name__--__main__"><strong>Blok Utama (<code>if __name__ == "__main__":</code>)</strong></h3>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    process_directory<span class="token punctuation">(</span>
+        input_dir<span class="token operator">=</span>r<span class="token string">"B:\app\PCD\FINAL PROJECT\image_enhancements\input"</span><span class="token punctuation">,</span>
+        output_dir<span class="token operator">=</span>r<span class="token string">"B:\app\PCD\FINAL PROJECT\image_enhancements\output"</span>
+    <span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li>
+<p><strong>Apa yang terjadi?</strong><br>
+Jika skrip dijalankan sebagai program utama, fungsi <code>process_directory</code> akan dipanggil dengan direktori input/output yang ditentukan.</p>
+</li>
+<li>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Direktori input: <code>B:\image_enhancements\input</code> (berisi file <code>citra.png</code>).</p>
+</li>
+<li>
+<p>Direktori output: <code>B:\image_enhancements\output</code> (tempat hasil filtering disimpan).</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="integrasi-dengan-studi-kasus"><strong>Integrasi dengan Studi Kasus</strong></h3>
+<p>Jika file <code>citra.png</code> dalam direktori input memiliki matriks intensitas:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+<p>Maka:</p>
+<ol>
+<li>
+<p><strong>Proses Filtering</strong>:</p>
+<ul>
+<li><code>sigma_d=5</code> (default), <code>sigma_r=10</code> (dinamis).</li>
+<li>Hasil akhir:<pre><code>[[93, 93, 94],
+ [100, 94, 105],
+ [84, 93, 103]]
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Analisis Histogram</strong>:</p>
+<ul>
+<li>
+<p>Input: Distribusi intensitas tersebar.</p>
+</li>
+<li>
+<p>Output: Intensitas lebih seragam → noise berkurang.</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="kesimpulan-6"><strong>Kesimpulan</strong></h3>
+<p>Fungsi <code>process_directory</code> adalah pipeline otomatis untuk:</p>
+<ol>
+<li>
+<p><strong>Memproses semua gambar dalam direktori input</strong> menggunakan Bilateral Filter.</p>
+</li>
+<li>
+<p><strong>Menyimpan hasil filtering</strong> ke direktori output.</p>
+</li>
+<li>
+<p><strong>Memvalidasi perubahan</strong> dengan analisis histogram.</p>
+</li>
+</ol>
+<p>Dalam studi kasus:</p>
+<ul>
+<li>
+<p>Gambar <code>citra.png</code> diproses sesuai parameter <code>sigma_d=5</code> dan <code>sigma_r=10</code>.</p>
+</li>
+<li>
+<p>Efek filtering tercapai: noise berkurang, tepi tetap tajam.</p>
+</li>
+<li>
+<p>Histogram output menunjukkan intensitas lebih homogen → efek flattening.</p>
+</li>
+</ul>
+<p>Fungsi ini sangat berguna untuk batch processing gambar, baik untuk peningkatan kualitas foto, praproses visi komputer, atau aplikasi artistik.</p>
+</div>
+</body>
+
+</html>
