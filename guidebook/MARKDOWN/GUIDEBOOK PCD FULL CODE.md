@@ -206,6 +206,110 @@ Tujuannya: **mengoptimalkan kinerja** dengan menghindari perhitungan ulang nilai
 
 ---
 
+
+#### Mengapa `max_intensity = 256` dan `sigma_r = 50` Digunakan?
+
+##### 1. `max_intensity = 256`
+
+**Alasan Utama**:
+
+- **Standar Gambar 8-Bit**:  
+
+  Citra digital umumnya disimpan dalam format 8-bit per channel, sehingga rentang intensitas setiap pixel adalah `0–255`.  
+  
+  Dengan `max_intensity = 256`, LUT (Lookup Table) mencakup **semua kemungkinan nilai intensitas** (termasuk indeks `0` hingga `255`).
+
+**Contoh Studi Kasus**:
+
+- Matriks intensitas dalam studi kasus:
+  ```
+  [[90, 85, 95],
+   [105, 100, 110],
+   [80, 95, 105]]
+  ```
+  Semua nilai intensitas berada dalam rentang `0–255`, sehingga LUT dengan `max_intensity=256` cukup untuk menangkap semua selisih intensitas (misalnya, `ΔI = 0, 5, 10, 15, 20`).
+
+**Keuntungan**:
+
+- **Efisiensi Memori**: Hanya membutuhkan array dengan 256 elemen (tidak peduli ukuran citra).
+
+- **Kompatibilitas Universal**: Cocok untuk semua citra 8-bit (format JPEG, PNG, BMP, dll.).
+
+---
+
+##### **2. `sigma_r = 50`**
+
+**Alasan Utama**:
+
+- **Kontrol Kelembutan Filter Berdasarkan Intensitas**:  
+  Parameter `sigma_r` mengontrol seberapa besar perbedaan intensitas diperbolehkan agar pixel tetap dianggap "mirip".  
+
+  Nilai default `sigma_r = 50` dipilih sebagai **kompromi antara penghapusan noise dan preservasi tepi**.
+
+**Formula Range Kernel**:
+$$
+\text{weight}(i) = e^{-\frac{i^2}{2\sigma_r^2}}
+$$
+
+- `i`: Selisih intensitas antara pixel tetangga dan pixel tengah.
+
+- `σ_r`: Kontrol "lebar" kurva Gaussian (semakin besar σ, semakin lebar kurva).
+
+**Contoh Studi Kasus**:
+- Dalam studi kasus, `sigma_r = 10` digunakan untuk efek lebih agresif (karena kontras rendah).  
+
+  Namun, dalam kode default, `sigma_r = 50` memberikan fleksibilitas untuk:
+  
+  - **Citra dengan kontras tinggi**: Selisih intensitas besar tetap diperbolehkan.
+
+  - **Citra dengan noise tinggi**: Filter lebih toleran terhadap variasi intensitas kecil.
+
+**Tabel Perbandingan Bobot untuk `i = 10`**:
+| `sigma_r` | Bobot (`i = 10`) |
+|----------|------------------|
+| 10       | 0.6065           |
+| 50       | 0.9802           |
+
+
+- Dengan `sigma_r = 50`, pixel dengan selisih intensitas `10` masih memiliki bobot tinggi (`~0.98`), sehingga lebih banyak pixel yang ikut dihaluskan.
+
+---
+
+#### **Hubungan antara `sigma_r` dan Efek Filtering**
+| `sigma_r` | Efek pada Citra | Alasan Pemilihan Default |
+|----------|------------------|--------------------------|
+| Rendah (misal: 10) | Preservasi tepi kuat, noise reduction moderat | Cocok untuk citra dengan kontras rendah (studi kasus). |
+| Tinggi (misal: 50) | Smoothing lebih agresif, noise reduction maksimal | Cocok untuk citra dengan kontras tinggi atau noise tinggi. |
+
+**Catatan**:  
+Dalam kode, fungsi `auto_sigma_r` menggantikan nilai default `sigma_r = 50` dengan nilai dinamis berdasarkan standar deviasi histogram citra. Ini memastikan filter menyesuaikan diri dengan karakteristik citra.
+
+---
+
+#### **Validasi dengan Studi Kasus**
+Dalam studi kasus dengan matriks intensitas:
+```
+[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+```
+- Standar deviasi intensitas ≈ `9.94` → `sigma_r = 10` (dari fungsi `auto_sigma_r`).
+
+- Jika menggunakan `sigma_r = 50` (default), bobot untuk selisih intensitas `10` adalah `~0.98`, sehingga:
+
+  - Pixel dengan selisih intensitas besar (misal: `ΔI = 20`) tetap memiliki bobot `~0.85`.
+
+  - Hasil filtering lebih halus, tetapi risiko mengaburkan tepi.
+
+---
+
+#### **Kesimpulan**
+- **`max_intensity = 256`**: Menjamin LUT mencakup semua nilai intensitas dalam citra 8-bit.
+
+- **`sigma_r = 50`**: Memberikan fleksibilitas untuk berbagai jenis citra (kontras tinggi, noise tinggi).  
+
+- **Fungsi Dinamis (`auto_sigma_r`)**: Menggantikan nilai default dengan nilai adaptif berdasarkan histogram citra, memastikan filter bekerja optimal untuk setiap kasus.
+
 ### **Langkah-Langkah Eksekusi**
 1. **Inisialisasi LUT**:
    ```python

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTAGHFIRULLAH</title>
+  <title>PCD PENJELASAN KODE ONLY</title>
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
 </head>
 
@@ -315,6 +315,153 @@ Digunakan untuk:</p>
 </tr>
 </tbody>
 </table><hr>
+<h4 id="mengapa-max_intensity--256-dan-sigma_r--50-digunakan">Mengapa <code>max_intensity = 256</code> dan <code>sigma_r = 50</code> Digunakan?</h4>
+<h5 id="max_intensity--256">1. <code>max_intensity = 256</code></h5>
+<p><strong>Alasan Utama</strong>:</p>
+<ul>
+<li>
+<p><strong>Standar Gambar 8-Bit</strong>:</p>
+<p>Citra digital umumnya disimpan dalam format 8-bit per channel, sehingga rentang intensitas setiap pixel adalah <code>0–255</code>.</p>
+<p>Dengan <code>max_intensity = 256</code>, LUT (Lookup Table) mencakup <strong>semua kemungkinan nilai intensitas</strong> (termasuk indeks <code>0</code> hingga <code>255</code>).</p>
+</li>
+</ul>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>Matriks intensitas dalam studi kasus:<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+Semua nilai intensitas berada dalam rentang <code>0–255</code>, sehingga LUT dengan <code>max_intensity=256</code> cukup untuk menangkap semua selisih intensitas (misalnya, <code>ΔI = 0, 5, 10, 15, 20</code>).</li>
+</ul>
+<p><strong>Keuntungan</strong>:</p>
+<ul>
+<li>
+<p><strong>Efisiensi Memori</strong>: Hanya membutuhkan array dengan 256 elemen (tidak peduli ukuran citra).</p>
+</li>
+<li>
+<p><strong>Kompatibilitas Universal</strong>: Cocok untuk semua citra 8-bit (format JPEG, PNG, BMP, dll.).</p>
+</li>
+</ul>
+<hr>
+<h5 id="sigma_r--50"><strong>2. <code>sigma_r = 50</code></strong></h5>
+<p><strong>Alasan Utama</strong>:</p>
+<ul>
+<li>
+<p><strong>Kontrol Kelembutan Filter Berdasarkan Intensitas</strong>:<br>
+Parameter <code>sigma_r</code> mengontrol seberapa besar perbedaan intensitas diperbolehkan agar pixel tetap dianggap “mirip”.</p>
+<p>Nilai default <code>sigma_r = 50</code> dipilih sebagai <strong>kompromi antara penghapusan noise dan preservasi tepi</strong>.</p>
+</li>
+</ul>
+<p><strong>Formula Range Kernel</strong>:<br>
+<span class="katex--display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>weight</mtext><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mfrac><msup><mi>i</mi><mn>2</mn></msup><mrow><mn>2</mn><msubsup><mi>σ</mi><mi>r</mi><mn>2</mn></msubsup></mrow></mfrac></mrow></msup></mrow><annotation encoding="application/x-tex">
+\text{weight}(i) = e^{-\frac{i^2}{2\sigma_r^2}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord text"><span class="mord">weight</span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.277778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.277778em;"></span></span><span class="base"><span class="strut" style="height: 1.44644em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.44644em;"><span class="" style="top: -3.65342em; margin-right: 0.05em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 1.13289em;"><span class="" style="top: -2.50619em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right: 0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.93844em;"><span class="" style="top: -2.24444em; margin-left: -0.03588em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mathnormal mtight" style="margin-right: 0.02778em;">r</span></span><span class="" style="top: -2.93844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.4em;"><span class=""></span></span></span></span></span></span></span></span></span><span class="" style="top: -3.2255em;"><span class="pstrut" style="height: 3em;"></span><span class="frac-line mtight" style="border-bottom-width: 0.049em;"></span></span><span class="" style="top: -3.384em;"><span class="pstrut" style="height: 3em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 1.04844em;"><span class="" style="top: -3.04844em; margin-right: 0.1em;"><span class="pstrut" style="height: 2.64444em;"></span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.779529em;"><span class=""></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<ul>
+<li>
+<p><code>i</code>: Selisih intensitas antara pixel tetangga dan pixel tengah.</p>
+</li>
+<li>
+<p><code>σ_r</code>: Kontrol “lebar” kurva Gaussian (semakin besar σ, semakin lebar kurva).</p>
+</li>
+</ul>
+<p><strong>Contoh Studi Kasus</strong>:</p>
+<ul>
+<li>
+<p>Dalam studi kasus, <code>sigma_r = 10</code> digunakan untuk efek lebih agresif (karena kontras rendah).</p>
+<p>Namun, dalam kode default, <code>sigma_r = 50</code> memberikan fleksibilitas untuk:</p>
+<ul>
+<li>
+<p><strong>Citra dengan kontras tinggi</strong>: Selisih intensitas besar tetap diperbolehkan.</p>
+</li>
+<li>
+<p><strong>Citra dengan noise tinggi</strong>: Filter lebih toleran terhadap variasi intensitas kecil.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tabel Perbandingan Bobot untuk <code>i = 10</code></strong>:</p>
+
+<table>
+<thead>
+<tr>
+<th><code>sigma_r</code></th>
+<th>Bobot (<code>i = 10</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>0.6065</td>
+</tr>
+<tr>
+<td>50</td>
+<td>0.9802</td>
+</tr>
+</tbody>
+</table><ul>
+<li>Dengan <code>sigma_r = 50</code>, pixel dengan selisih intensitas <code>10</code> masih memiliki bobot tinggi (<code>~0.98</code>), sehingga lebih banyak pixel yang ikut dihaluskan.</li>
+</ul>
+<hr>
+<h4 id="hubungan-antara-sigma_r-dan-efek-filtering"><strong>Hubungan antara <code>sigma_r</code> dan Efek Filtering</strong></h4>
+
+<table>
+<thead>
+<tr>
+<th><code>sigma_r</code></th>
+<th>Efek pada Citra</th>
+<th>Alasan Pemilihan Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rendah (misal: 10)</td>
+<td>Preservasi tepi kuat, noise reduction moderat</td>
+<td>Cocok untuk citra dengan kontras rendah (studi kasus).</td>
+</tr>
+<tr>
+<td>Tinggi (misal: 50)</td>
+<td>Smoothing lebih agresif, noise reduction maksimal</td>
+<td>Cocok untuk citra dengan kontras tinggi atau noise tinggi.</td>
+</tr>
+</tbody>
+</table><p><strong>Catatan</strong>:<br>
+Dalam kode, fungsi <code>auto_sigma_r</code> menggantikan nilai default <code>sigma_r = 50</code> dengan nilai dinamis berdasarkan standar deviasi histogram citra. Ini memastikan filter menyesuaikan diri dengan karakteristik citra.</p>
+<hr>
+<h4 id="validasi-dengan-studi-kasus"><strong>Validasi dengan Studi Kasus</strong></h4>
+<p>Dalam studi kasus dengan matriks intensitas:</p>
+<pre><code>[[90, 85, 95],
+ [105, 100, 110],
+ [80, 95, 105]]
+</code></pre>
+<ul>
+<li>
+<p>Standar deviasi intensitas ≈ <code>9.94</code> → <code>sigma_r = 10</code> (dari fungsi <code>auto_sigma_r</code>).</p>
+</li>
+<li>
+<p>Jika menggunakan <code>sigma_r = 50</code> (default), bobot untuk selisih intensitas <code>10</code> adalah <code>~0.98</code>, sehingga:</p>
+<ul>
+<li>
+<p>Pixel dengan selisih intensitas besar (misal: <code>ΔI = 20</code>) tetap memiliki bobot <code>~0.85</code>.</p>
+</li>
+<li>
+<p>Hasil filtering lebih halus, tetapi risiko mengaburkan tepi.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="kesimpulan"><strong>Kesimpulan</strong></h4>
+<ul>
+<li>
+<p><strong><code>max_intensity = 256</code></strong>: Menjamin LUT mencakup semua nilai intensitas dalam citra 8-bit.</p>
+</li>
+<li>
+<p><strong><code>sigma_r = 50</code></strong>: Memberikan fleksibilitas untuk berbagai jenis citra (kontras tinggi, noise tinggi).</p>
+</li>
+<li>
+<p><strong>Fungsi Dinamis (<code>auto_sigma_r</code>)</strong>: Menggantikan nilai default dengan nilai adaptif berdasarkan histogram citra, memastikan filter bekerja optimal untuk setiap kasus.</p>
+</li>
+</ul>
 <h3 id="langkah-langkah-eksekusi"><strong>Langkah-Langkah Eksekusi</strong></h3>
 <ol>
 <li>
@@ -455,7 +602,7 @@ range_weights <span class="token operator">=</span> similarity_lut<span class="t
 <p>Dalam studi kasus dengan <code>sigma_r = 10</code> dan selisih intensitas <code>i = 10</code>, bobot dari LUT adalah <code>~0.6065</code>.<br>
 Ini digunakan untuk memperhitungkan kontribusi pixel tetangga <code>(0,0)</code> (intensitas 90) terhadap pixel tengah <code>(1,1)</code> (intensitas 100).</p>
 <hr>
-<h3 id="kesimpulan"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-1"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>precompute_similarity_lut</code> adalah <strong>komponen kunci</strong> dalam optimasi Bilateral Filter. Dengan membuat tabel pencarian untuk bobot intensitas, kode menghindari perhitungan eksponensial berulang, sehingga mempercepat proses filtering tanpa mengorbankan akurasi.</p>
 <h1 id="bilateral_filter">3. bilateral_filter()</h1>
 <h3 id="konversi-gambar-ke-array-numpy"><strong>1. Konversi Gambar ke Array NumPy</strong></h3>
@@ -714,7 +861,7 @@ normalized_weights <span class="token operator">=</span> combined_weights <span 
 </li>
 </ul>
 <hr>
-<h3 id="kesimpulan-1"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-2"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>bilateral_filter</code> menggabungkan <strong>domain kernel</strong> (spatial smoothing) dan <strong>range kernel</strong> (intensitas) untuk preservasi tepi. Dalam studi kasus:</p>
 <ul>
 <li>
@@ -940,7 +1087,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
 </li>
 </ul>
 <hr>
-<h3 id="kesimpulan-2"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-3"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>auto_sigma_r</code> menghitung <code>sigma_r</code> berdasarkan standar deviasi histogram citra. Dalam studi kasus:</p>
 <ul>
 <li>
@@ -1212,7 +1359,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
 </tr>
 </tbody>
 </table><hr>
-<h3 id="kesimpulan-3"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-4"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>iterative_bilateral_filter</code> menerapkan Bilateral Filter secara berulang untuk:</p>
 <ol>
 <li>
@@ -1488,7 +1635,7 @@ Jika hasil grayscale, hilangkan dimensi channel tambahan.</p>
 </li>
 </ol>
 <hr>
-<h3 id="kesimpulan-4"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-5"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>enhance_color_image</code> meningkatkan kualitas citra dengan:</p>
 <ol>
 <li>
@@ -1720,7 +1867,7 @@ plt<span class="token punctuation">.</span>show<span class="token punctuation">(
 </li>
 </ul>
 <hr>
-<h3 id="kesimpulan-5"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-6"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>analyze_histogram</code> memvalidasi efek Bilateral Filter dengan membandingkan histogram sebelum dan sesudah filtering. Dalam studi kasus:</p>
 <ul>
 <li>
@@ -1944,7 +2091,7 @@ Jika skrip dijalankan sebagai program utama, fungsi <code>process_directory</cod
 </li>
 </ol>
 <hr>
-<h3 id="kesimpulan-6"><strong>Kesimpulan</strong></h3>
+<h3 id="kesimpulan-7"><strong>Kesimpulan</strong></h3>
 <p>Fungsi <code>process_directory</code> adalah pipeline otomatis untuk:</p>
 <ol>
 <li>
