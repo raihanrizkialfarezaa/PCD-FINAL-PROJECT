@@ -443,6 +443,14 @@ img_array = np.array(image).astype(np.float32)
   Dikonversi ke array NumPy 3D:  
   `img_array.shape = (3, 3, 1)` (jika grayscale) atau `(3, 3, 3)` (jika warna).
 
+Fungsi `bilateral_filter` dirancang untuk memproses **baik citra grayscale maupun warna (RGB)** dengan struktur kode yang **seragam** . Konversi ke array 3D (`h x w x c`) memastikan:
+
+-   **Uniformitas Dimensi** : Semua citra, baik grayscale (1 channel) maupun warna (3 channel), diolah dengan struktur data yang sama.
+
+-   **Kemudahan Iterasi** : Looping per channel (`for ch in range(c)`) berjalan tanpa pengecekan tambahan untuk citra grayscale.
+
+Konversi ke array 3D dalam `bilateral_filter` adalah **langkah penting untuk memastikan keseragaman struktur data** , **menghindari kompleksitas logika** , dan **meningkatkan kompatibilitas** dengan berbagai jenis citra. Meskipun untuk citra grayscale dimensi ketiga tampak "tidak perlu", ini mempermudah implementasi dan mengurangi risiko error dalam operasi berulang.
+
 ---
 
 ### **2. Penanganan Citra Grayscale**

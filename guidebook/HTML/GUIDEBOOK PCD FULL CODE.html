@@ -624,6 +624,16 @@ Matriks input:</p>
 <code>img_array.shape = (3, 3, 1)</code> (jika grayscale) atau <code>(3, 3, 3)</code> (jika warna).</p>
 </li>
 </ul>
+<p>Fungsi <code>bilateral_filter</code> dirancang untuk memproses <strong>baik citra grayscale maupun warna (RGB)</strong> dengan struktur kode yang <strong>seragam</strong> . Konversi ke array 3D (<code>h x w x c</code>) memastikan:</p>
+<ul>
+<li>
+<p><strong>Uniformitas Dimensi</strong> : Semua citra, baik grayscale (1 channel) maupun warna (3 channel), diolah dengan struktur data yang sama.</p>
+</li>
+<li>
+<p><strong>Kemudahan Iterasi</strong> : Looping per channel (<code>for ch in range(c)</code>) berjalan tanpa pengecekan tambahan untuk citra grayscale.</p>
+</li>
+</ul>
+<p>Konversi ke array 3D dalam <code>bilateral_filter</code> adalah <strong>langkah penting untuk memastikan keseragaman struktur data</strong> , <strong>menghindari kompleksitas logika</strong> , dan <strong>meningkatkan kompatibilitas</strong> dengan berbagai jenis citra. Meskipun untuk citra grayscale dimensi ketiga tampak “tidak perlu”, ini mempermudah implementasi dan mengurangi risiko error dalam operasi berulang.</p>
 <hr>
 <h3 id="penanganan-citra-grayscale"><strong>2. Penanganan Citra Grayscale</strong></h3>
 <pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>img_array<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
